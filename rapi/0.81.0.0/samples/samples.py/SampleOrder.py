@@ -2,7 +2,7 @@
 
 #   ===========================================================================
 #
-#   Copyright (c) 2020 by Omnesys Technologies, Inc.  All rights reserved.
+#   Copyright (c) 2024 by Omnesys Technologies, Inc.  All rights reserved.
 #
 #   Warning :
 #       This Software Product is protected by copyright law and international
@@ -148,7 +148,7 @@ async def rithmic_order_notification_cb(msg_buf):
     global g_order_is_complete
     
     msg = rithmic_order_notification_pb2.RithmicOrderNotification()
-    msg.ParseFromString(msg_buf[4:])
+    msg.ParseFromString(msg_buf[0:])
 
     notify_type_to_string = {rithmic_order_notification_pb2.RithmicOrderNotification.ORDER_RCVD_FROM_CLNT     : "ORDER_RCVD_FROM_CLNT",
                              rithmic_order_notification_pb2.RithmicOrderNotification.MODIFY_RCVD_FROM_CLNT    : "MODIFY_RCVD_FROM_CLNT",
@@ -244,7 +244,7 @@ async def rithmic_order_notification_cb(msg_buf):
 async def exchange_order_notification_cb(msg_buf):
     # exchange_order_notification : 352
     msg = exchange_order_notification_pb2.ExchangeOrderNotification()
-    msg.ParseFromString(msg_buf[4:])
+    msg.ParseFromString(msg_buf[0:])
 
     notify_type_to_string = {exchange_order_notification_pb2.ExchangeOrderNotification.STATUS        : "STATUS",
                              exchange_order_notification_pb2.ExchangeOrderNotification.MODIFY        : "MODIFY",
@@ -367,12 +367,9 @@ async def send_heartbeat(ws):
     rq.template_id = 18
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
-        
-    # length into bytes (4 bytes, big/little, true/false)
+
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder='big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
     print(f"sent heartbeat request")
@@ -390,12 +387,9 @@ async def list_systems(ws):
     rq.user_msg.append("world");
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
-        
-    # length into bytes (4 bytes, big/little, true/false)
+
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder='big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
     print(f"sent list_systems request")
@@ -403,11 +397,8 @@ async def list_systems(ws):
     rp_buf = bytearray()
     rp_buf = await ws.recv()
 
-    # get length from first four bytes from rp_buf
-    rp_length = int.from_bytes(rp_buf[0:3], byteorder='big', signed=True)
-
     rp = response_rithmic_system_info_pb2.ResponseRithmicSystemInfo()
-    rp.ParseFromString(rp_buf[4:])
+    rp.ParseFromString(rp_buf[0:])
 
     # an rp code of "0" indicates that the request was completed successfully
     if rp.rp_code[0] == "0":
@@ -456,12 +447,9 @@ async def consume(ws):
 
         print(f"received msg {num_msgs} of {max_num_msgs}")
 
-        # get length from first four bytes from msg_buf
-        msg_length = int.from_bytes(msg_buf[0:3], byteorder='big', signed=True)
-
         # parse into base class just to get a template id
         base = base_pb2.Base()
-        base.ParseFromString(msg_buf[4:])
+        base.ParseFromString(msg_buf[0:])
 
         # route msg based on template id
         if base.template_id == 13:
@@ -527,22 +515,17 @@ async def rithmic_login(ws, system_name, infra_type, user_id, password):
     rq.infra_type  = infra_type
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
 
     rp_buf = bytearray()
     rp_buf = await ws.recv()
 
-    # get length from first four bytes from rp_buf
-    rp_length = int.from_bytes(rp_buf[0:3], byteorder='big', signed=True)
-
     rp = response_login_pb2.ResponseLogin()
-    rp.ParseFromString(rp_buf[4:])
+    rp.ParseFromString(rp_buf[0:])
 
     print(f"")
     print(f"      ResponseLogin :")
@@ -571,22 +554,17 @@ async def login_info(ws):
     rq.user_msg.append("hello")
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
 
     rp_buf = bytearray()
     rp_buf = await ws.recv()
 
-    # get length from first four bytes from rp_buf
-    rp_length = int.from_bytes(rp_buf[0:3], byteorder='big', signed=True)
-
     rp = response_login_info_pb2.ResponseLoginInfo()
-    rp.ParseFromString(rp_buf[4:])
+    rp.ParseFromString(rp_buf[0:])
 
     user_type_to_string = {0:'ADMIN',
                            1:'FCM',
@@ -633,11 +611,9 @@ async def list_accounts(ws, fcm_id, ib_id, user_type):
     rq.user_type   = user_type
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     rp_is_done = False
 
@@ -648,11 +624,8 @@ async def list_accounts(ws, fcm_id, ib_id, user_type):
     while rp_is_done == False:
         rp_buf = await ws.recv()
 
-        # get length from first four bytes from rp_buf
-        rp_length = int.from_bytes(rp_buf[0:3], byteorder='big', signed=True)
-
         rp = response_account_list_pb2.ResponseAccountList()
-        rp.ParseFromString(rp_buf[4:])
+        rp.ParseFromString(rp_buf[0:])
 
         print(f"")
         print(f" ResponseAccountList :")
@@ -718,11 +691,9 @@ async def list_trade_routes(ws):
     rq.subscribe_for_updates = False
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     rp_is_done = False
 
@@ -733,11 +704,8 @@ async def list_trade_routes(ws):
     while rp_is_done == False:
         rp_buf = await ws.recv()
 
-        # get length from first four bytes from rp_buf
-        rp_length = int.from_bytes(rp_buf[0:3], byteorder='big', signed=True)
-
         rp = response_trade_routes_pb2.ResponseTradeRoutes()
-        rp.ParseFromString(rp_buf[4:])
+        rp.ParseFromString(rp_buf[0:])
 
         print(f"")
         print(f" ResponseTradeRoutes :")
@@ -784,11 +752,9 @@ async def subscribe_for_order_updates(ws, fcm_id, ib_id, account_id):
     rq.account_id = account_id
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
 
@@ -824,11 +790,9 @@ async def new_order(ws, fcm_id, ib_id, account_id, exchange, symbol, trade_route
     rq.trade_route = trade_route
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
 
@@ -842,11 +806,9 @@ async def rithmic_logout(ws):
     rq.user_msg.append("hello")
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf = bytearray()
-    buf = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf = serialized
 
     await ws.send(buf)
 
@@ -925,8 +887,6 @@ if num_args == 2 or num_args == 8:
             loop.run_until_complete(consume(ws))
 
         if ws.open:
-            #print(f"unsubscribing ...")
-            #loop.run_until_complete(unsubscribe(ws, exchange, symbol))
             print(f"logging out ...")
             loop.run_until_complete(rithmic_logout(ws))
             print(f"disconnecting ...")

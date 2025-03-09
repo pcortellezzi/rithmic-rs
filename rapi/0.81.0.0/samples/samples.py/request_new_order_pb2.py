@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='request_new_order.proto',
   package='rti',
-  serialized_pb=_b('\n\x17request_new_order.proto\x12\x03rti\"\xe1\t\n\x0fRequestNewOrder\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x12\n\x08user_msg\x18\x98\x8d\x08 \x03(\t\x12\x12\n\x08user_tag\x18\x87\xb4\t \x01(\t\x12\x10\n\x06\x66\x63m_id\x18\x9d\xb3\t \x01(\t\x12\x0f\n\x05ib_id\x18\x9e\xb3\t \x01(\t\x12\x14\n\naccount_id\x18\x98\xb3\t \x01(\t\x12\x10\n\x06symbol\x18\x94\xdc\x06 \x01(\t\x12\x12\n\x08\x65xchange\x18\x95\xdc\x06 \x01(\t\x12\x12\n\x08quantity\x18\x84\xeb\x06 \x01(\x05\x12\x0f\n\x05price\x18\xe2\xdd\x06 \x01(\x01\x12\x17\n\rtrigger_price\x18\xff\x8d\t \x01(\x01\x12@\n\x10transaction_type\x18\x83\xeb\x06 \x01(\x0e\x32$.rti.RequestNewOrder.TransactionType\x12\x31\n\x08\x64uration\x18\x85\xeb\x06 \x01(\x0e\x32\x1d.rti.RequestNewOrder.Duration\x12\x34\n\nprice_type\x18\x88\xeb\x06 \x01(\x0e\x32\x1e.rti.RequestNewOrder.PriceType\x12\x15\n\x0btrade_route\x18\x90\xeb\x06 \x01(\t\x12=\n\x0emanual_or_auto\x18\xd6\xb8\t \x01(\x0e\x32#.rti.RequestNewOrder.OrderPlacement\x12\x19\n\x0f\x63\x61ncel_at_ssboe\x18\x9d\xcb\t \x01(\x05\x12\x19\n\x0f\x63\x61ncel_at_usecs\x18\x9e\xcb\t \x01(\x05\x12\x1b\n\x11\x63\x61ncel_after_secs\x18\xf8\xb6\t \x01(\x05\x12\x1b\n\x11if_touched_symbol\x18\xd3\xb6\t \x01(\t\x12\x1d\n\x13if_touched_exchange\x18\xd4\xb6\t \x01(\t\x12>\n\x14if_touched_condition\x18\xd5\xb6\t \x01(\x0e\x32\x1e.rti.RequestNewOrder.Condition\x12\x41\n\x16if_touched_price_field\x18\xd6\xb6\t \x01(\x0e\x32\x1f.rti.RequestNewOrder.PriceField\x12\x1a\n\x10if_touched_price\x18\xa0\xb0\t \x01(\x01\"$\n\x0fTransactionType\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02\"&\n\x0eOrderPlacement\x12\n\n\x06MANUAL\x10\x01\x12\x08\n\x04\x41UTO\x10\x02\".\n\x08\x44uration\x12\x07\n\x03\x44\x41Y\x10\x01\x12\x07\n\x03GTC\x10\x02\x12\x07\n\x03IOC\x10\x03\x12\x07\n\x03\x46OK\x10\x04\"p\n\tPriceType\x12\t\n\x05LIMIT\x10\x01\x12\n\n\x06MARKET\x10\x02\x12\x0e\n\nSTOP_LIMIT\x10\x03\x12\x0f\n\x0bSTOP_MARKET\x10\x04\x12\x15\n\x11MARKET_IF_TOUCHED\x10\x05\x12\x14\n\x10LIMIT_IF_TOUCHED\x10\x06\"M\n\nPriceField\x12\r\n\tBID_PRICE\x10\x01\x12\x0f\n\x0bOFFER_PRICE\x10\x02\x12\x0f\n\x0bTRADE_PRICE\x10\x03\x12\x0e\n\nLEAN_PRICE\x10\x04\"\x83\x01\n\tCondition\x12\x0c\n\x08\x45QUAL_TO\x10\x01\x12\x10\n\x0cNOT_EQUAL_TO\x10\x02\x12\x10\n\x0cGREATER_THAN\x10\x03\x12\x19\n\x15GREATER_THAN_EQUAL_TO\x10\x04\x12\x0f\n\x0bLESSER_THAN\x10\x05\x12\x18\n\x14LESSER_THAN_EQUAL_TO\x10\x06')
+  serialized_pb=_b('\n\x17request_new_order.proto\x12\x03rti\"\xb0\n\n\x0fRequestNewOrder\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x12\n\x08user_msg\x18\x98\x8d\x08 \x03(\t\x12\x12\n\x08user_tag\x18\x87\xb4\t \x01(\t\x12\x15\n\x0bwindow_name\x18\x85\xb8\t \x01(\t\x12\x10\n\x06\x66\x63m_id\x18\x9d\xb3\t \x01(\t\x12\x0f\n\x05ib_id\x18\x9e\xb3\t \x01(\t\x12\x14\n\naccount_id\x18\x98\xb3\t \x01(\t\x12\x10\n\x06symbol\x18\x94\xdc\x06 \x01(\t\x12\x12\n\x08\x65xchange\x18\x95\xdc\x06 \x01(\t\x12\x12\n\x08quantity\x18\x84\xeb\x06 \x01(\x05\x12\x0f\n\x05price\x18\xe2\xdd\x06 \x01(\x01\x12\x17\n\rtrigger_price\x18\xff\x8d\t \x01(\x01\x12@\n\x10transaction_type\x18\x83\xeb\x06 \x01(\x0e\x32$.rti.RequestNewOrder.TransactionType\x12\x31\n\x08\x64uration\x18\x85\xeb\x06 \x01(\x0e\x32\x1d.rti.RequestNewOrder.Duration\x12\x34\n\nprice_type\x18\x88\xeb\x06 \x01(\x0e\x32\x1e.rti.RequestNewOrder.PriceType\x12\x15\n\x0btrade_route\x18\x90\xeb\x06 \x01(\t\x12=\n\x0emanual_or_auto\x18\xd6\xb8\t \x01(\x0e\x32#.rti.RequestNewOrder.OrderPlacement\x12\x1a\n\x10release_at_ssboe\x18\xf7\xb6\t \x01(\x05\x12\x1a\n\x10release_at_usecs\x18\xb5\xb7\t \x01(\x05\x12\x19\n\x0f\x63\x61ncel_at_ssboe\x18\x9d\xcb\t \x01(\x05\x12\x19\n\x0f\x63\x61ncel_at_usecs\x18\x9e\xcb\t \x01(\x05\x12\x1b\n\x11\x63\x61ncel_after_secs\x18\xf8\xb6\t \x01(\x05\x12\x1b\n\x11if_touched_symbol\x18\xd3\xb6\t \x01(\t\x12\x1d\n\x13if_touched_exchange\x18\xd4\xb6\t \x01(\t\x12>\n\x14if_touched_condition\x18\xd5\xb6\t \x01(\x0e\x32\x1e.rti.RequestNewOrder.Condition\x12\x41\n\x16if_touched_price_field\x18\xd6\xb6\t \x01(\x0e\x32\x1f.rti.RequestNewOrder.PriceField\x12\x1a\n\x10if_touched_price\x18\xa0\xb0\t \x01(\x01\"$\n\x0fTransactionType\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02\"&\n\x0eOrderPlacement\x12\n\n\x06MANUAL\x10\x01\x12\x08\n\x04\x41UTO\x10\x02\".\n\x08\x44uration\x12\x07\n\x03\x44\x41Y\x10\x01\x12\x07\n\x03GTC\x10\x02\x12\x07\n\x03IOC\x10\x03\x12\x07\n\x03\x46OK\x10\x04\"p\n\tPriceType\x12\t\n\x05LIMIT\x10\x01\x12\n\n\x06MARKET\x10\x02\x12\x0e\n\nSTOP_LIMIT\x10\x03\x12\x0f\n\x0bSTOP_MARKET\x10\x04\x12\x15\n\x11MARKET_IF_TOUCHED\x10\x05\x12\x14\n\x10LIMIT_IF_TOUCHED\x10\x06\"M\n\nPriceField\x12\r\n\tBID_PRICE\x10\x01\x12\x0f\n\x0bOFFER_PRICE\x10\x02\x12\x0f\n\x0bTRADE_PRICE\x10\x03\x12\x0e\n\nLEAN_PRICE\x10\x04\"\x83\x01\n\tCondition\x12\x0c\n\x08\x45QUAL_TO\x10\x01\x12\x10\n\x0cNOT_EQUAL_TO\x10\x02\x12\x10\n\x0cGREATER_THAN\x10\x03\x12\x19\n\x15GREATER_THAN_EQUAL_TO\x10\x04\x12\x0f\n\x0bLESSER_THAN\x10\x05\x12\x18\n\x14LESSER_THAN_EQUAL_TO\x10\x06')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -41,8 +41,8 @@ _REQUESTNEWORDER_TRANSACTIONTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=831,
-  serialized_end=867,
+  serialized_start=910,
+  serialized_end=946,
 )
 _sym_db.RegisterEnumDescriptor(_REQUESTNEWORDER_TRANSACTIONTYPE)
 
@@ -63,8 +63,8 @@ _REQUESTNEWORDER_ORDERPLACEMENT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=869,
-  serialized_end=907,
+  serialized_start=948,
+  serialized_end=986,
 )
 _sym_db.RegisterEnumDescriptor(_REQUESTNEWORDER_ORDERPLACEMENT)
 
@@ -93,8 +93,8 @@ _REQUESTNEWORDER_DURATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=909,
-  serialized_end=955,
+  serialized_start=988,
+  serialized_end=1034,
 )
 _sym_db.RegisterEnumDescriptor(_REQUESTNEWORDER_DURATION)
 
@@ -131,8 +131,8 @@ _REQUESTNEWORDER_PRICETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=957,
-  serialized_end=1069,
+  serialized_start=1036,
+  serialized_end=1148,
 )
 _sym_db.RegisterEnumDescriptor(_REQUESTNEWORDER_PRICETYPE)
 
@@ -161,8 +161,8 @@ _REQUESTNEWORDER_PRICEFIELD = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1071,
-  serialized_end=1148,
+  serialized_start=1150,
+  serialized_end=1227,
 )
 _sym_db.RegisterEnumDescriptor(_REQUESTNEWORDER_PRICEFIELD)
 
@@ -199,8 +199,8 @@ _REQUESTNEWORDER_CONDITION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1151,
-  serialized_end=1282,
+  serialized_start=1230,
+  serialized_end=1361,
 )
 _sym_db.RegisterEnumDescriptor(_REQUESTNEWORDER_CONDITION)
 
@@ -234,147 +234,168 @@ _REQUESTNEWORDER = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='fcm_id', full_name='rti.RequestNewOrder.fcm_id', index=3,
+      name='window_name', full_name='rti.RequestNewOrder.window_name', index=3,
+      number=154629, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='fcm_id', full_name='rti.RequestNewOrder.fcm_id', index=4,
       number=154013, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='ib_id', full_name='rti.RequestNewOrder.ib_id', index=4,
+      name='ib_id', full_name='rti.RequestNewOrder.ib_id', index=5,
       number=154014, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='account_id', full_name='rti.RequestNewOrder.account_id', index=5,
+      name='account_id', full_name='rti.RequestNewOrder.account_id', index=6,
       number=154008, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='symbol', full_name='rti.RequestNewOrder.symbol', index=6,
+      name='symbol', full_name='rti.RequestNewOrder.symbol', index=7,
       number=110100, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='exchange', full_name='rti.RequestNewOrder.exchange', index=7,
+      name='exchange', full_name='rti.RequestNewOrder.exchange', index=8,
       number=110101, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='quantity', full_name='rti.RequestNewOrder.quantity', index=8,
+      name='quantity', full_name='rti.RequestNewOrder.quantity', index=9,
       number=112004, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='price', full_name='rti.RequestNewOrder.price', index=9,
+      name='price', full_name='rti.RequestNewOrder.price', index=10,
       number=110306, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='trigger_price', full_name='rti.RequestNewOrder.trigger_price', index=10,
+      name='trigger_price', full_name='rti.RequestNewOrder.trigger_price', index=11,
       number=149247, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='transaction_type', full_name='rti.RequestNewOrder.transaction_type', index=11,
+      name='transaction_type', full_name='rti.RequestNewOrder.transaction_type', index=12,
       number=112003, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='duration', full_name='rti.RequestNewOrder.duration', index=12,
+      name='duration', full_name='rti.RequestNewOrder.duration', index=13,
       number=112005, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='price_type', full_name='rti.RequestNewOrder.price_type', index=13,
+      name='price_type', full_name='rti.RequestNewOrder.price_type', index=14,
       number=112008, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='trade_route', full_name='rti.RequestNewOrder.trade_route', index=14,
+      name='trade_route', full_name='rti.RequestNewOrder.trade_route', index=15,
       number=112016, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='manual_or_auto', full_name='rti.RequestNewOrder.manual_or_auto', index=15,
+      name='manual_or_auto', full_name='rti.RequestNewOrder.manual_or_auto', index=16,
       number=154710, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cancel_at_ssboe', full_name='rti.RequestNewOrder.cancel_at_ssboe', index=16,
+      name='release_at_ssboe', full_name='rti.RequestNewOrder.release_at_ssboe', index=17,
+      number=154487, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='release_at_usecs', full_name='rti.RequestNewOrder.release_at_usecs', index=18,
+      number=154549, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cancel_at_ssboe', full_name='rti.RequestNewOrder.cancel_at_ssboe', index=19,
       number=157085, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cancel_at_usecs', full_name='rti.RequestNewOrder.cancel_at_usecs', index=17,
+      name='cancel_at_usecs', full_name='rti.RequestNewOrder.cancel_at_usecs', index=20,
       number=157086, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cancel_after_secs', full_name='rti.RequestNewOrder.cancel_after_secs', index=18,
+      name='cancel_after_secs', full_name='rti.RequestNewOrder.cancel_after_secs', index=21,
       number=154488, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='if_touched_symbol', full_name='rti.RequestNewOrder.if_touched_symbol', index=19,
+      name='if_touched_symbol', full_name='rti.RequestNewOrder.if_touched_symbol', index=22,
       number=154451, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='if_touched_exchange', full_name='rti.RequestNewOrder.if_touched_exchange', index=20,
+      name='if_touched_exchange', full_name='rti.RequestNewOrder.if_touched_exchange', index=23,
       number=154452, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='if_touched_condition', full_name='rti.RequestNewOrder.if_touched_condition', index=21,
+      name='if_touched_condition', full_name='rti.RequestNewOrder.if_touched_condition', index=24,
       number=154453, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='if_touched_price_field', full_name='rti.RequestNewOrder.if_touched_price_field', index=22,
+      name='if_touched_price_field', full_name='rti.RequestNewOrder.if_touched_price_field', index=25,
       number=154454, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='if_touched_price', full_name='rti.RequestNewOrder.if_touched_price', index=23,
+      name='if_touched_price', full_name='rti.RequestNewOrder.if_touched_price', index=26,
       number=153632, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -398,7 +419,7 @@ _REQUESTNEWORDER = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=33,
-  serialized_end=1282,
+  serialized_end=1361,
 )
 
 _REQUESTNEWORDER.fields_by_name['transaction_type'].enum_type = _REQUESTNEWORDER_TRANSACTIONTYPE

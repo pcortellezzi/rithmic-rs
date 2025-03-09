@@ -3,14 +3,12 @@
 /*      	   TEMPLATE VERSION                */
 /*   -------------------------------------------   */
 
-// TEMPLATE VERSION NUMBER  ---  "5.25"
-// TEMPLATE RELEASE DATE    ---  April 10th 2023
+// TEMPLATE VERSION NUMBER  ---  "5.27"
+// TEMPLATE RELEASE DATE    ---  May 2023
 
 /*   -------------------------------------------   */
 /*      	   SHARED ACROSS                   */
 /*   -------------------------------------------   */
-
-import "message_type.proto";
 
 import "request_login.proto";
 import "response_login.proto";
@@ -72,8 +70,8 @@ import "response_depth_by_order_updates.proto";
 import "request_get_volume_at_price.proto";
 import "response_get_volume_at_price.proto";
 
-import "best_bid_offer.proto";
-import "order_book.proto";
+import "best_bid_offer.proto";      
+import "order_book.proto";      
 import "last_trade.proto";
 import "trade_statistics.proto";
 import "quote_statistics.proto";
@@ -84,7 +82,7 @@ import "market_mode.proto";
 import "front_month_contract_update.proto";
 import "depth_by_order.proto";
 import "depth_by_order_end_event.proto";
-import "symbol_margin_rate.proto";
+import "symbol_margin_rate.proto";       
 import "order_price_limits.proto";
 
 /*   -------------------------------------------   */
@@ -185,7 +183,7 @@ import "response_replay_executions.proto";
 import "trade_route.proto";
 import "bracket_updates.proto";
 import "rithmic_order_notification.proto";
-import "exchange_order_notification.proto";
+import "exchange_order_notification.proto";       
 import "account_list_updates.proto";
 import "update_easy_to_borrow_list.proto";
 import "account_rms_updates.proto";

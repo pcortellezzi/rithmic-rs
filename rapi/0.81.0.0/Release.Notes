@@ -1,4 +1,4 @@
-Copyright (c) 2023 by Omnesys Technologies, Inc. All rights reserved.
+Copyright (c) 2024 by Omnesys Technologies, Inc. All rights reserved.
 
 Warning :
 	This Software Product is protected by copyright law and international
@@ -16,6 +16,35 @@ This Software Product is licensed strictly in accordance with a separate
 Software System License Agreement, granted by Omnesys Technologies, Inc., which
 contains restrictions on use, reverse engineering, disclosure, confidentiality 
 and other matters.
+
+    	  	   Release notes for RProtocolAPI 0.81.0.0
+	  	   ---------------------------------------
+
+The sample scripts do not prefix a 4 byte message length on any of the outbound
+messages written to the server as well as it does not expect a 4 byte message
+length from messages received from the server. Thus the sample scripts are now
+compliant with version 2.0 payload format imposed by the protocol server.
+
+    	  	   Release notes for RProtocolAPI 0.80.0.0
+	  	   ---------------------------------------
+
+This version adds the following enhancements
+
+(*) rithmic_order_notification - enum value 'RELEASE_PENDING = 21' is removed
+                                 from NotifyType
+
+(*) Following new fields are added in exchange_order_notification.proto
+    	      	optional string tp_exchange_order_id = 153647;
+
+
+    	  	   Release notes for RProtocolAPI 0.79.0.0
+	  	   ---------------------------------------
+
+This version adds the following enhancements
+
+(*) account_auto_liquidate - this is a new field in 'ResponseAccountList' proto
+                             message. It indicates whether auto liquidate is
+			     'enabled' or 'disabled' for an account.
 
     	  	   Release notes for RProtocolAPI 0.78.0.0
 	  	   ---------------------------------------

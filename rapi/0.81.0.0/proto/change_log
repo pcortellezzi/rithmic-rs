@@ -1,3 +1,27 @@
+ 
+#;==============================================================================
+$;
+$;		    template version	5.27
+#;   			release date    June 15th 2023
+$;
+#;==============================================================================
+
+(*) Following new fields are added in exchange_order_notification.proto
+
+    	      	optional string tp_exchange_order_id = 153647;
+
+(*) enum value 'RELEASE_PENDING = 21' is removed from rithmic_order_notification.proto
+ 
+#;==============================================================================
+$;
+$;		    template version	5.26
+#;   			release date    May 4th 2023
+$;
+#;==============================================================================
+
+(*) Following new fields are added in response_account_list.proto
+
+	      optional string account_auto_liquidate = 131035;
 
 #;==============================================================================
 $;

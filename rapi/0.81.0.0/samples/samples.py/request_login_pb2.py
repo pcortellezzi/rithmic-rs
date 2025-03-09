@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='request_login.proto',
   package='rti',
-  serialized_pb=_b('\n\x13request_login.proto\x12\x03rti\"\x9d\x03\n\x0cRequestLogin\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x1a\n\x10template_version\x18\xa2\xb0\t \x01(\t\x12\x12\n\x08user_msg\x18\x98\x8d\x08 \x03(\t\x12\x0e\n\x04user\x18\xbb\xff\x07 \x01(\t\x12\x12\n\x08password\x18\xd4\xf7\x07 \x01(\t\x12\x12\n\x08\x61pp_name\x18\xd2\xf7\x07 \x01(\t\x12\x15\n\x0b\x61pp_version\x18\xdb\x85\x08 \x01(\t\x12\x15\n\x0bsystem_name\x18\x9c\xb0\t \x01(\t\x12\x34\n\ninfra_type\x18\x95\xb0\t \x01(\x0e\x32\x1e.rti.RequestLogin.SysInfraType\x12\x12\n\x08mac_addr\x18\xec\xe5\x08 \x03(\t\x12\x14\n\nos_version\x18\x95\xe5\x08 \x01(\t\x12\x15\n\x0bos_platform\x18\x94\xe5\x08 \x01(\t\"i\n\x0cSysInfraType\x12\x10\n\x0cTICKER_PLANT\x10\x01\x12\x0f\n\x0bORDER_PLANT\x10\x02\x12\x11\n\rHISTORY_PLANT\x10\x03\x12\r\n\tPNL_PLANT\x10\x04\x12\x14\n\x10REPOSITORY_PLANT\x10\x05')
+  serialized_pb=_b('\n\x13request_login.proto\x12\x03rti\"\xba\x03\n\x0cRequestLogin\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x1a\n\x10template_version\x18\xa2\xb0\t \x01(\t\x12\x12\n\x08user_msg\x18\x98\x8d\x08 \x03(\t\x12\x0e\n\x04user\x18\xbb\xff\x07 \x01(\t\x12\x12\n\x08password\x18\xd4\xf7\x07 \x01(\t\x12\x12\n\x08\x61pp_name\x18\xd2\xf7\x07 \x01(\t\x12\x15\n\x0b\x61pp_version\x18\xdb\x85\x08 \x01(\t\x12\x15\n\x0bsystem_name\x18\x9c\xb0\t \x01(\t\x12\x34\n\ninfra_type\x18\x95\xb0\t \x01(\x0e\x32\x1e.rti.RequestLogin.SysInfraType\x12\x12\n\x08mac_addr\x18\xec\xe5\x08 \x03(\t\x12\x14\n\nos_version\x18\x95\xe5\x08 \x01(\t\x12\x15\n\x0bos_platform\x18\x94\xe5\x08 \x01(\t\x12\x1b\n\x11\x61ggregated_quotes\x18\xac\xb0\t \x01(\x08\"i\n\x0cSysInfraType\x12\x10\n\x0cTICKER_PLANT\x10\x01\x12\x0f\n\x0bORDER_PLANT\x10\x02\x12\x11\n\rHISTORY_PLANT\x10\x03\x12\r\n\tPNL_PLANT\x10\x04\x12\x14\n\x10REPOSITORY_PLANT\x10\x05')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -53,8 +53,8 @@ _REQUESTLOGIN_SYSINFRATYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=337,
-  serialized_end=442,
+  serialized_start=366,
+  serialized_end=471,
 )
 _sym_db.RegisterEnumDescriptor(_REQUESTLOGIN_SYSINFRATYPE)
 
@@ -150,6 +150,13 @@ _REQUESTLOGIN = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='aggregated_quotes', full_name='rti.RequestLogin.aggregated_quotes', index=12,
+      number=153644, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -163,7 +170,7 @@ _REQUESTLOGIN = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=29,
-  serialized_end=442,
+  serialized_end=471,
 )
 
 _REQUESTLOGIN.fields_by_name['infra_type'].enum_type = _REQUESTLOGIN_SYSINFRATYPE

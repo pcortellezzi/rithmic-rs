@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='response_account_list.proto',
   package='rti',
-  serialized_pb=_b('\n\x1bresponse_account_list.proto\x12\x03rti\"\x8a\x02\n\x13ResponseAccountList\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x12\n\x08user_msg\x18\x98\x8d\x08 \x03(\t\x12\x1c\n\x12rq_handler_rp_code\x18\x9c\x8d\x08 \x03(\t\x12\x11\n\x07rp_code\x18\x9e\x8d\x08 \x03(\t\x12\x10\n\x06\x66\x63m_id\x18\x9d\xb3\t \x01(\t\x12\x0f\n\x05ib_id\x18\x9e\xb3\t \x01(\t\x12\x14\n\naccount_id\x18\x98\xb3\t \x01(\t\x12\x16\n\x0c\x61\x63\x63ount_name\x18\x92\xb3\t \x01(\t\x12\x1a\n\x10\x61\x63\x63ount_currency\x18\x8f\xb6\t \x01(\t\x12*\n auto_liq_threshold_current_value\x18\xe0\xff\x07 \x01(\t')
+  serialized_pb=_b('\n\x1bresponse_account_list.proto\x12\x03rti\"\xac\x02\n\x13ResponseAccountList\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x12\n\x08user_msg\x18\x98\x8d\x08 \x03(\t\x12\x1c\n\x12rq_handler_rp_code\x18\x9c\x8d\x08 \x03(\t\x12\x11\n\x07rp_code\x18\x9e\x8d\x08 \x03(\t\x12\x10\n\x06\x66\x63m_id\x18\x9d\xb3\t \x01(\t\x12\x0f\n\x05ib_id\x18\x9e\xb3\t \x01(\t\x12\x14\n\naccount_id\x18\x98\xb3\t \x01(\t\x12\x16\n\x0c\x61\x63\x63ount_name\x18\x92\xb3\t \x01(\t\x12\x1a\n\x10\x61\x63\x63ount_currency\x18\x8f\xb6\t \x01(\t\x12 \n\x16\x61\x63\x63ount_auto_liquidate\x18\xdb\xff\x07 \x01(\t\x12*\n auto_liq_threshold_current_value\x18\xe0\xff\x07 \x01(\t')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -96,7 +96,14 @@ _RESPONSEACCOUNTLIST = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='auto_liq_threshold_current_value', full_name='rti.ResponseAccountList.auto_liq_threshold_current_value', index=9,
+      name='account_auto_liquidate', full_name='rti.ResponseAccountList.account_auto_liquidate', index=9,
+      number=131035, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='auto_liq_threshold_current_value', full_name='rti.ResponseAccountList.auto_liq_threshold_current_value', index=10,
       number=131040, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -114,7 +121,7 @@ _RESPONSEACCOUNTLIST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=37,
-  serialized_end=303,
+  serialized_end=337,
 )
 
 DESCRIPTOR.message_types_by_name['ResponseAccountList'] = _RESPONSEACCOUNTLIST

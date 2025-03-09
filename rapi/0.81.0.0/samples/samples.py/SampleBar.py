@@ -2,7 +2,7 @@
 
 #   ===========================================================================
 #
-#   Copyright (c) 2020 by Omnesys Technologies, Inc.  All rights reserved.
+#   Copyright (c) 2024 by Omnesys Technologies, Inc.  All rights reserved.
 #
 #   Warning :
 #       This Software Product is protected by copyright law and international
@@ -25,10 +25,10 @@
 
 #   ===========================================================================
 #
-#   SampleMD.py
-#   ===========
+#   SampleBar.py
+#   ============
 #   This sample program is intended to provide a simple, but working, python3
-#   example of how one might use R | Protocol API to subscribe to market data.
+#   example of how one might use R | Protocol API to retrieve tick bars.
 #   It makes use of the websockets library, which is built over the asyncio
 #   library.
 #
@@ -37,7 +37,7 @@
 #   - To list the available Rithmic systems, pass in a single argument
 #     specifying the URI of the server.
 #
-#   - To log in to a specific system and subscribe to market data, a number of
+#   - To log in to a specific system and retrieve tick bars, a number of
 #     additional parameters are necessary, specifying the system, login
 #     credentials and instrument.
 #
@@ -96,16 +96,85 @@ import response_login_pb2
 import request_logout_pb2
 import response_logout_pb2
 
-import request_market_data_update_pb2
-import response_market_data_update_pb2
-import last_trade_pb2
-import best_bid_offer_pb2
+import request_tick_bar_replay_pb2
+import response_tick_bar_replay_pb2
 
 #   ===========================================================================
 
-USAGE   = "SampleMD.py connect_point [system_name user_id password exchange symbol]"
+USAGE   = "SampleBar.py connect_point [system_name user_id password exchange symbol]"
 USAGE_2 = "  (try wss://rituz00100.rithmic.com:443 for the connect_point)"
 
+#   ===========================================================================
+#   global variable to signal when to exit consume()
+
+g_rp_is_done = False
+
+#   ===========================================================================
+#   This routine interprets the msg_buf as a ResponseTickBarReplay
+
+async def response_tick_bar_replay_cb(msg_buf):
+    # rithmic_order_notification : 207
+    global g_rp_is_done
+    
+    msg = response_tick_bar_replay_pb2.ResponseTickBarReplay()
+    msg.ParseFromString(msg_buf[0:])
+
+    bar_type_to_string = {response_tick_bar_replay_pb2.ResponseTickBarReplay.BarType.TICK_BAR   : "TICK_BAR",
+                          response_tick_bar_replay_pb2.ResponseTickBarReplay.BarType.RANGE_BAR  : "RANGE_BAR",
+                          response_tick_bar_replay_pb2.ResponseTickBarReplay.BarType.VOLUME_BAR : "VOLUME_BAR"}
+
+    bar_sub_type_to_string = {response_tick_bar_replay_pb2.ResponseTickBarReplay.BarSubType.REGULAR : "REGULAR",
+                              response_tick_bar_replay_pb2.ResponseTickBarReplay.BarSubType.CUSTOM  : "CUSTOM"}
+    
+    print(f"")
+    print(f"   ResponseTickBarReplay : ")
+    print(f"             template_id : {msg.template_id}")
+    print(f"                user_msg : {msg.user_msg}")
+    print(f"      rq_handler_rp_code : {msg.rq_handler_rp_code}")
+    print(f"                 rp_code : {msg.rp_code}")
+
+    print(f"                  symbol : {msg.symbol}")
+    print(f"                exchange : {msg.exchange}")
+    
+    print(f"                    type : {bar_type_to_string[msg.type]} ({msg.type})")
+    print(f"                sub_type : {bar_sub_type_to_string[msg.sub_type]} ({msg.sub_type})")
+    print(f"         type_specifier  : {msg.type_specifier}")
+
+    print(f"              num_trades : {msg.num_trades}")
+    print(f"                  volume : {msg.volume}")
+    print(f"              bid_volume : {msg.bid_volume}")
+    print(f"              ask_volume : {msg.ask_volume}")
+
+    print(f"              open_price : {msg.open_price}")
+    print(f"             close_price : {msg.close_price}")
+    print(f"              high_price : {msg.high_price}")
+    print(f"               low_price : {msg.low_price}")
+    print(f" custom_session_open_ssm : {msg.custom_session_open_ssm}")
+    print(f"          data_bar_ssboe : {msg.data_bar_ssboe}")
+    print(f"          data_bar_usecs : {msg.data_bar_usecs}")
+    print(f"")
+
+    # How to determine when the response is done :
+    # --------------------------------------------
+    # There can be many messages returned when requesting tick bars.  The first
+    # <N> messages will have actual tick data, and the last message will have
+    # an rp_code indicating any error condition.  This non-empty rp_code also
+    # indicates that all the responses to the request are now done.
+    #
+    # When receiving responses containing tick data, the rq_handler_rp_code
+    # will not be empty, and contain "0".  The rp_code on these same messages
+    # will be empty.  When receiving the last message, sometimes called the
+    # end-of-response message, the rq_handler_rp_code will be empty, and the
+    # rp_code will contain any error code.  A value of "0" in rp_code indicates
+    # there there was no error.
+    #
+    # This pattern of a request having <N> + 1 response msgs appears often in
+    # the RProtocolAPI.
+    if len(msg.rq_handler_rp_code) == 0 and \
+           len(msg.rp_code) > 0:
+        print(f"tick bar responses are done.")
+        g_rp_is_done = True
+        
 #   ===========================================================================
 #   This routine connects to the specified URI and returns the websocket
 #   connection object.
@@ -126,12 +195,9 @@ async def send_heartbeat(ws):
     rq.template_id = 18
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
-        
-    # length into bytes (4 bytes, big/little, true/false)
+
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder='big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
     print(f"sent heartbeat request")
@@ -149,12 +215,9 @@ async def list_systems(ws):
     rq.user_msg.append("world");
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
-        
-    # length into bytes (4 bytes, big/little, true/false)
+
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder='big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
     print(f"sent list_systems request")
@@ -162,11 +225,8 @@ async def list_systems(ws):
     rp_buf = bytearray()
     rp_buf = await ws.recv()
 
-    # get length from first four bytes from rp_buf
-    rp_length = int.from_bytes(rp_buf[0:3], byteorder='big', signed=True)
-
     rp = response_rithmic_system_info_pb2.ResponseRithmicSystemInfo()
-    rp.ParseFromString(rp_buf[4:])
+    rp.ParseFromString(rp_buf[0:])
 
     # an rp code of "0" indicates that the request was completed successfully
     if rp.rp_code[0] == "0":
@@ -186,14 +246,16 @@ async def list_systems(ws):
 #   there is no traffic.  It will exit after receiving max_num_messages.
 
 async def consume(ws):
+    global g_rp_is_done
     # send a heartbeat immediately, just in case
     await send_heartbeat(ws)
 
-    max_num_msgs = 100
+    max_num_msgs = 100000
     num_msgs = 0
 
-    # After 100 messages are read, this routine will exit
-    while num_msgs < max_num_msgs:
+    # After <max_num_msgs>  messages are read or the tick bar response is done,
+    # this routine will exit
+    while num_msgs < max_num_msgs and not g_rp_is_done :
         msg_buf = bytearray()
 
         waiting_for_msg = True
@@ -215,12 +277,9 @@ async def consume(ws):
 
         print(f"received msg {num_msgs} of {max_num_msgs}")
 
-        # get length from first four bytes from msg_buf
-        msg_length = int.from_bytes(msg_buf[0:3], byteorder='big', signed=True)
-
         # parse into base class just to get a template id
         base = base_pb2.Base()
-        base.ParseFromString(msg_buf[4:])
+        base.ParseFromString(msg_buf[0:])
 
         # route msg based on template id
         if base.template_id == 13:
@@ -232,84 +291,30 @@ async def consume(ws):
             print(f" consumed msg : {msg_type} ({base.template_id})")
             
         elif base.template_id == 101:
-            msg = response_market_data_update_pb2.ResponseMarketDataUpdate()
-            msg.ParseFromString(msg_buf[4:])
-            print(f"")
-            print(f" ResponseMarketDataUpdate : ")
-            print(f"                 user_msg : {msg.user_msg}")
-            print(f"                  rp_code : {msg.rp_code}")
+            msg_type = "market data update response"
+            print(f" consumed msg : {msg_type} ({base.template_id})")
 
         elif base.template_id == 151: # best_bid_offer
-            msg = best_bid_offer_pb2.BestBidOffer()
-            msg.ParseFromString(msg_buf[4:])
-            
-            is_bid        = True if msg.presence_bits & best_bid_offer_pb2.BestBidOffer.PresenceBits.BID else False
-            is_ask        = True if msg.presence_bits & best_bid_offer_pb2.BestBidOffer.PresenceBits.ASK else False
-            is_lean_price = True if msg.presence_bits & best_bid_offer_pb2.BestBidOffer.PresenceBits.LEAN_PRICE else False
-            
-            print(f"")
-            print(f"      BestBidOffer : ")
-            print(f"            symbol : {msg.symbol}")
-            print(f"          exchange : {msg.exchange}")
-            print(f"     presence_bits : {msg.presence_bits}")
-            print(f"        clear_bits : {msg.clear_bits}")
-            print(f"       is_snapshot : {msg.is_snapshot}")
-            print(f"         bid_price : {msg.bid_price} ({is_bid})")
-            print(f"          bid_size : {msg.bid_size}")
-            print(f"        bid_orders : {msg.bid_orders}")
-            print(f" bid_implicit_size : {msg.bid_implicit_size}")
-
-            print(f"         ask_price : {msg.ask_price} ({is_ask})")
-            print(f"          ask_size : {msg.ask_size}")
-            print(f"        ask_orders : {msg.ask_orders}")
-            print(f" ask_implicit_size : {msg.ask_implicit_size}")
-            
-            print(f"        lean_price : {msg.lean_price} ({is_lean_price})")
-
-            print(f"             ssboe : {msg.ssboe}")
-            print(f"             usecs : {msg.usecs}")
-            print(f"")
+            msg_type = "best_bid_offer"
+            print(f" consumed msg : {msg_type} ({base.template_id})")
             
         elif base.template_id == 150: # last_trade
-            msg = last_trade_pb2.LastTrade()
-            msg.ParseFromString(msg_buf[4:])
+            msg_type = "last_trade"
+            print(f" consumed msg : {msg_type} ({base.template_id})")
+
+        elif base.template_id == 207:
+            msg_type = "tick bar replay response"
+            print(f" consumed msg : {msg_type} ({base.template_id})")
+            await response_tick_bar_replay_cb(msg_buf)
+    
+        elif base.template_id == 251:
+            msg_type = "tick bar"
+            print(f" consumed msg : {msg_type} ({base.template_id})")
+
+        else:
+            msg_type = "unrecognized template id"
+            print(f" consumed msg : {msg_type} ({base.template_id})")
             
-            is_last_trade     = True if msg.presence_bits & last_trade_pb2.LastTrade.PresenceBits.LAST_TRADE else False
-            is_net_change     = True if msg.presence_bits & last_trade_pb2.LastTrade.PresenceBits.NET_CHANGE else False
-            is_percent_change = True if msg.presence_bits & last_trade_pb2.LastTrade.PresenceBits.PRECENT_CHANGE else False
-            is_volume         = True if msg.presence_bits & last_trade_pb2.LastTrade.PresenceBits.VOLUME else False
-            is_vwap           = True if msg.presence_bits & last_trade_pb2.LastTrade.PresenceBits.VWAP else False
-
-            print(f"")
-            print(f"                   LastTrade : ")
-            print(f"                      symbol : {msg.symbol}")
-            print(f"                    exchange : {msg.exchange}")
-            print(f"               presence_bits : {msg.presence_bits}")
-            print(f"                  clear_bits : {msg.clear_bits}")
-            print(f"                 is_snapshot : {msg.is_snapshot}")
-            print(f"                 trade_price : {msg.trade_price} ({is_last_trade})")
-            print(f"                  trade_size : {msg.trade_size}")
-
-            if msg.aggressor == last_trade_pb2.LastTrade.TransactionType.BUY:
-                print(f"                   aggressor : BUY ({msg.aggressor})")
-            else:
-                print(f"                   aggressor : SELL ({msg.aggressor})")
-                
-            print(f"           exchange_order_id : {msg.exchange_order_id}")
-            print(f" aggressor_exchange_order_id : {msg.aggressor_exchange_order_id}")
-            print(f"                  net_change : {msg.net_change} ({is_net_change})")
-            print(f"              percent_change : {msg.percent_change} ({is_percent_change})")
-            print(f"                      volume : {msg.volume} ({is_volume})")
-            print(f"                        vwap : {msg.vwap} ({is_vwap})")
-            print(f"                       ssboe : {msg.ssboe}")
-            print(f"                       usecs : {msg.usecs}")
-            print(f"                source_ssboe : {msg.source_ssboe}")
-            print(f"                source_usecs : {msg.source_usecs}")
-            print(f"                source_nsecs : {msg.source_nsecs}")
-            print(f"                   jop_ssboe : {msg.jop_ssboe}")
-            print(f"                   jop_usecs : {msg.jop_nsecs}")
-            print(f"")
-
 
 #   ===========================================================================
 #   This routine logs into the specified Rithmic system using the specified
@@ -325,29 +330,25 @@ async def rithmic_login(ws, system_name, infra_type, user_id, password):
 
     rq.user        = user_id
     rq.password    = password
-    rq.app_name    = "SampleMD.py"
+    rq.app_name    = "SampleBar.py"
     rq.app_version = "0.3.0.0"
     rq.system_name = system_name
     rq.infra_type  = infra_type
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
 
     rp_buf = bytearray()
     rp_buf = await ws.recv()
 
-    # get length from first four bytes from rp_buf
-    rp_length = int.from_bytes(rp_buf[0:3], byteorder='big', signed=True)
-
     rp = response_login_pb2.ResponseLogin()
-    rp.ParseFromString(rp_buf[4:])
+    rp.ParseFromString(rp_buf[0:])
 
+    print(f"")
     print(f"      ResponseLogin :")
     print(f"      ===============")
     print(f"        template_id : {rp.template_id}")
@@ -360,55 +361,39 @@ async def rithmic_login(ws, system_name, infra_type, user_id, password):
     print(f"         state_code : {rp.state_code}")
     print(f" heartbeat_interval : {rp.heartbeat_interval}")
     print(f"     unique_user_id : {rp.unique_user_id}")
+    print(f"")
 
 #   ===========================================================================
-#   This routine subscribes for trade and best bid/offer market data for the
-#   specified instrument.  Any received messages from this subscription request
+#   This routine requests tick bars for the
+#   specified instrument.  Any received messages resulting from this request
 #   are handled elsewhere (see the consume() routine)
 
-async def subscribe(ws, exchange, symbol):
+async def replay_tick_bars(ws, exchange, symbol):
 
-    rq = request_market_data_update_pb2.RequestMarketDataUpdate()
+    rq = request_tick_bar_replay_pb2.RequestTickBarReplay()
 
-    rq.template_id      = 100;
+    rq.template_id      = 206;
     rq.user_msg.append("hello")
 
-    rq.symbol      = symbol
-    rq.exchange    = exchange
-    rq.request     = request_market_data_update_pb2.RequestMarketDataUpdate.Request.SUBSCRIBE
-    rq.update_bits = request_market_data_update_pb2.RequestMarketDataUpdate.UpdateBits.LAST_TRADE | request_market_data_update_pb2.RequestMarketDataUpdate.UpdateBits.BBO
+    rq.symbol       = symbol
+    rq.exchange     = exchange
+    rq.bar_type     = request_tick_bar_replay_pb2.RequestTickBarReplay.BarType.TICK_BAR
+    rq.bar_type_specifier = "1"
 
+    # sub-type refers to whether the bar is calculated from the beginning of the
+    # trading session, or from some custom time period
+    rq.bar_sub_type = request_tick_bar_replay_pb2.RequestTickBarReplay.BarSubType.REGULAR
+
+    # The start/end indexes specify the time period over which bars are
+    # replayed.  They are integers in unix time format, which is seconds
+    # elapsed since Jan 1, 1970 GMT.
+    rq.start_index  = 1595260800  # 2020-07-20 12:00:00 EDT
+    rq.finish_index = 1595261400  # 2020-07-20 12:10:00 EDT
+    
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
-
-    await ws.send(buf)
-
-#   ===========================================================================
-#   This routine unsubscribes for trade and best bid/offer market data for the
-#   specified instrument.
-
-async def unsubscribe(ws, exchange, symbol):
-
-    rq = request_market_data_update_pb2.RequestMarketDataUpdate()
-
-    rq.template_id      = 100;
-    rq.user_msg.append("hello")
-
-    rq.symbol      = symbol
-    rq.exchange    = exchange
-    rq.request     = request_market_data_update_pb2.RequestMarketDataUpdate.Request.UNSUBSCRIBE
-    rq.update_bits = request_market_data_update_pb2.RequestMarketDataUpdate.UpdateBits.LAST_TRADE | request_market_data_update_pb2.RequestMarketDataUpdate.UpdateBits.BBO
-
-    serialized = rq.SerializeToString()
-    length     = len(serialized)
-
-    buf  = bytearray()
-    buf  = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf  = serialized
 
     await ws.send(buf)
 
@@ -422,11 +407,9 @@ async def rithmic_logout(ws):
     rq.user_msg.append("hello")
 
     serialized = rq.SerializeToString()
-    length     = len(serialized)
 
     buf = bytearray()
-    buf = length.to_bytes(4, byteorder = 'big', signed=True)
-    buf += serialized
+    buf = serialized
 
     await ws.send(buf)
 
@@ -466,20 +449,18 @@ if num_args == 2 or num_args == 7:
         
         loop.run_until_complete(rithmic_login(ws,
                                               system_name,
-                                              request_login_pb2.RequestLogin.SysInfraType.TICKER_PLANT,
+                                              request_login_pb2.RequestLogin.SysInfraType.HISTORY_PLANT,
                                               user_id,
                                               password))
 
         exchange    = sys.argv[5]
         symbol      = sys.argv[6]
 
-        loop.run_until_complete(subscribe(ws, exchange, symbol))
+        loop.run_until_complete(replay_tick_bars(ws, exchange, symbol))
 
         loop.run_until_complete(consume(ws))
 
         if ws.open:
-            print(f"unsubscribing ...")
-            loop.run_until_complete(unsubscribe(ws, exchange, symbol))
             print(f"logging out ...")
             loop.run_until_complete(rithmic_logout(ws))
             print(f"disconnecting ...")

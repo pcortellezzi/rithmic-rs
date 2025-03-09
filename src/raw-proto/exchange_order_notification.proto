@@ -72,6 +72,7 @@ message ExchangeOrderNotification
 	optional string            trade_exchange         = 112021;
 	optional string            trade_route            = 112016;
 	optional string            exchange_order_id      = 149238;
+	optional string            tp_exchange_order_id   = 153647;
 	optional string            instrument_type        = 110116;
 
 	optional  int32            quantity               = 112004;

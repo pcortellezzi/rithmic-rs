@@ -18,7 +18,7 @@ _sym_db = _symbol_database.Default()
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='rithmic_order_notification.proto',
   package='rti',
-  serialized_pb=_b('\n rithmic_order_notification.proto\x12\x03rti\"\xfb\x10\n\x18RithmicOrderNotification\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x12\n\x08user_tag\x18\x87\xb4\t \x01(\t\x12?\n\x0bnotify_type\x18\x99\xb0\t \x01(\x0e\x32(.rti.RithmicOrderNotification.NotifyType\x12\x15\n\x0bis_snapshot\x18\xa9\xdc\x06 \x01(\x08\x12\x10\n\x06status\x18\xdf\xdd\x06 \x01(\t\x12\x13\n\tbasket_id\x18\xdc\xdd\x06 \x01(\t\x12\x1c\n\x12original_basket_id\x18\x81\xb7\t \x01(\t\x12\x1b\n\x11linked_basket_ids\x18\x96\xde\x06 \x01(\t\x12\x10\n\x06\x66\x63m_id\x18\x9d\xb3\t \x01(\t\x12\x0f\n\x05ib_id\x18\x9e\xb3\t \x01(\t\x12\x11\n\x07user_id\x18\xbb\xff\x07 \x01(\t\x12\x14\n\naccount_id\x18\x98\xb3\t \x01(\t\x12\x10\n\x06symbol\x18\x94\xdc\x06 \x01(\t\x12\x12\n\x08\x65xchange\x18\x95\xdc\x06 \x01(\t\x12\x18\n\x0etrade_exchange\x18\x95\xeb\x06 \x01(\t\x12\x15\n\x0btrade_route\x18\x90\xeb\x06 \x01(\t\x12\x1b\n\x11\x65xchange_order_id\x18\xf6\x8d\t \x01(\t\x12\x19\n\x0finstrument_type\x18\xa4\xdc\x06 \x01(\t\x12\x1b\n\x11\x63ompletion_reason\x18\x99\x8e\t \x01(\t\x12\x12\n\x08quantity\x18\x84\xeb\x06 \x01(\x05\x12\x0f\n\x05price\x18\xe2\xdd\x06 \x01(\x01\x12\x17\n\rtrigger_price\x18\xff\x8d\t \x01(\x01\x12I\n\x10transaction_type\x18\x83\xeb\x06 \x01(\x0e\x32-.rti.RithmicOrderNotification.TransactionType\x12:\n\x08\x64uration\x18\x85\xeb\x06 \x01(\x0e\x32&.rti.RithmicOrderNotification.Duration\x12=\n\nprice_type\x18\x88\xeb\x06 \x01(\x0e\x32\'.rti.RithmicOrderNotification.PriceType\x12\x42\n\x0forig_price_type\x18\x92\xb9\t \x01(\x0e\x32\'.rti.RithmicOrderNotification.PriceType\x12\x46\n\x0emanual_or_auto\x18\xd6\xb8\t \x01(\x0e\x32,.rti.RithmicOrderNotification.OrderPlacement\x12\x41\n\x0c\x62racket_type\x18\x9f\xcb\t \x01(\x0e\x32).rti.RithmicOrderNotification.BracketType\x12\x18\n\x0e\x61vg_fill_price\x18\xf2\xdd\x06 \x01(\x01\x12\x19\n\x0ftotal_fill_size\x18\xff\xb3\t \x01(\x05\x12\x1d\n\x13total_unfilled_size\x18\x80\xb4\t \x01(\x05\x12\x19\n\x0fsequence_number\x18\x82\xeb\x06 \x01(\t\x12\x1e\n\x14orig_sequence_number\x18\x8f\x8e\t \x01(\t\x12\x1d\n\x13\x63or_sequence_number\x18\x90\x8e\t \x01(\t\x12\x12\n\x08\x63urrency\x18\x8e\xb6\t \x01(\t\x12\x16\n\x0c\x63ountry_code\x18\xbc\xb4\t \x01(\t\x12\x0e\n\x04text\x18\xc8\xa9\x07 \x01(\t\x12\x15\n\x0breport_text\x18\xdc\xa9\x07 \x01(\t\x12\x11\n\x07remarks\x18\xb6\xb9\t \x01(\t\x12\x19\n\x0f\x63\x61ncel_at_ssboe\x18\x9d\xcb\t \x01(\x05\x12\x19\n\x0f\x63\x61ncel_at_usecs\x18\x9e\xcb\t \x01(\x05\x12\x1b\n\x11\x63\x61ncel_after_secs\x18\xf8\xb6\t \x01(\x05\x12\x0f\n\x05ssboe\x18\xd4\x94\t \x01(\x05\x12\x0f\n\x05usecs\x18\xd5\x94\t \x01(\x05\"\xcb\x03\n\nNotifyType\x12\x18\n\x14ORDER_RCVD_FROM_CLNT\x10\x01\x12\x19\n\x15MODIFY_RCVD_FROM_CLNT\x10\x02\x12\x19\n\x15\x43\x41NCEL_RCVD_FROM_CLNT\x10\x03\x12\x10\n\x0cOPEN_PENDING\x10\x04\x12\x12\n\x0eMODIFY_PENDING\x10\x05\x12\x12\n\x0e\x43\x41NCEL_PENDING\x10\x06\x12\x1b\n\x17ORDER_RCVD_BY_EXCH_GTWY\x10\x07\x12\x1c\n\x18MODIFY_RCVD_BY_EXCH_GTWY\x10\x08\x12\x1c\n\x18\x43\x41NCEL_RCVD_BY_EXCH_GTWY\x10\t\x12\x16\n\x12ORDER_SENT_TO_EXCH\x10\n\x12\x17\n\x13MODIFY_SENT_TO_EXCH\x10\x0b\x12\x17\n\x13\x43\x41NCEL_SENT_TO_EXCH\x10\x0c\x12\x08\n\x04OPEN\x10\r\x12\x0c\n\x08MODIFIED\x10\x0e\x12\x0c\n\x08\x43OMPLETE\x10\x0f\x12\x17\n\x13MODIFICATION_FAILED\x10\x10\x12\x17\n\x13\x43\x41NCELLATION_FAILED\x10\x11\x12\x13\n\x0fTRIGGER_PENDING\x10\x12\x12\x0b\n\x07GENERIC\x10\x13\x12\x16\n\x12LINK_ORDERS_FAILED\x10\x14\",\n\x0fTransactionType\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02\x12\x06\n\x02SS\x10\x03\".\n\x08\x44uration\x12\x07\n\x03\x44\x41Y\x10\x01\x12\x07\n\x03GTC\x10\x02\x12\x07\n\x03IOC\x10\x03\x12\x07\n\x03\x46OK\x10\x04\"C\n\tPriceType\x12\t\n\x05LIMIT\x10\x01\x12\n\n\x06MARKET\x10\x02\x12\x0e\n\nSTOP_LIMIT\x10\x03\x12\x0f\n\x0bSTOP_MARKET\x10\x04\"\x8c\x01\n\x0b\x42racketType\x12\r\n\tSTOP_ONLY\x10\x01\x12\x0f\n\x0bTARGET_ONLY\x10\x02\x12\x13\n\x0fTARGET_AND_STOP\x10\x03\x12\x14\n\x10STOP_ONLY_STATIC\x10\x04\x12\x16\n\x12TARGET_ONLY_STATIC\x10\x05\x12\x1a\n\x16TARGET_AND_STOP_STATIC\x10\x06\"&\n\x0eOrderPlacement\x12\n\n\x06MANUAL\x10\x01\x12\x08\n\x04\x41UTO\x10\x02')
+  serialized_pb=_b('\n rithmic_order_notification.proto\x12\x03rti\"\xd4\x11\n\x18RithmicOrderNotification\x12\x15\n\x0btemplate_id\x18\xe3\xb6\t \x02(\x05\x12\x12\n\x08user_tag\x18\x87\xb4\t \x01(\t\x12?\n\x0bnotify_type\x18\x99\xb0\t \x01(\x0e\x32(.rti.RithmicOrderNotification.NotifyType\x12\x15\n\x0bis_snapshot\x18\xa9\xdc\x06 \x01(\x08\x12\x10\n\x06status\x18\xdf\xdd\x06 \x01(\t\x12\x13\n\tbasket_id\x18\xdc\xdd\x06 \x01(\t\x12\x1c\n\x12original_basket_id\x18\x81\xb7\t \x01(\t\x12\x1b\n\x11linked_basket_ids\x18\x96\xde\x06 \x01(\t\x12\x10\n\x06\x66\x63m_id\x18\x9d\xb3\t \x01(\t\x12\x0f\n\x05ib_id\x18\x9e\xb3\t \x01(\t\x12\x11\n\x07user_id\x18\xbb\xff\x07 \x01(\t\x12\x14\n\naccount_id\x18\x98\xb3\t \x01(\t\x12\x10\n\x06symbol\x18\x94\xdc\x06 \x01(\t\x12\x12\n\x08\x65xchange\x18\x95\xdc\x06 \x01(\t\x12\x18\n\x0etrade_exchange\x18\x95\xeb\x06 \x01(\t\x12\x15\n\x0btrade_route\x18\x90\xeb\x06 \x01(\t\x12\x1b\n\x11\x65xchange_order_id\x18\xf6\x8d\t \x01(\t\x12\x19\n\x0finstrument_type\x18\xa4\xdc\x06 \x01(\t\x12\x1b\n\x11\x63ompletion_reason\x18\x99\x8e\t \x01(\t\x12\x12\n\x08quantity\x18\x84\xeb\x06 \x01(\x05\x12\x1e\n\x14quan_release_pending\x18\x9b\xeb\x06 \x01(\x05\x12\x0f\n\x05price\x18\xe2\xdd\x06 \x01(\x01\x12\x17\n\rtrigger_price\x18\xff\x8d\t \x01(\x01\x12I\n\x10transaction_type\x18\x83\xeb\x06 \x01(\x0e\x32-.rti.RithmicOrderNotification.TransactionType\x12:\n\x08\x64uration\x18\x85\xeb\x06 \x01(\x0e\x32&.rti.RithmicOrderNotification.Duration\x12=\n\nprice_type\x18\x88\xeb\x06 \x01(\x0e\x32\'.rti.RithmicOrderNotification.PriceType\x12\x42\n\x0forig_price_type\x18\x92\xb9\t \x01(\x0e\x32\'.rti.RithmicOrderNotification.PriceType\x12\x46\n\x0emanual_or_auto\x18\xd6\xb8\t \x01(\x0e\x32,.rti.RithmicOrderNotification.OrderPlacement\x12\x41\n\x0c\x62racket_type\x18\x9f\xcb\t \x01(\x0e\x32).rti.RithmicOrderNotification.BracketType\x12\x18\n\x0e\x61vg_fill_price\x18\xf2\xdd\x06 \x01(\x01\x12\x19\n\x0ftotal_fill_size\x18\xff\xb3\t \x01(\x05\x12\x1d\n\x13total_unfilled_size\x18\x80\xb4\t \x01(\x05\x12\x19\n\x0fsequence_number\x18\x82\xeb\x06 \x01(\t\x12\x1e\n\x14orig_sequence_number\x18\x8f\x8e\t \x01(\t\x12\x1d\n\x13\x63or_sequence_number\x18\x90\x8e\t \x01(\t\x12\x12\n\x08\x63urrency\x18\x8e\xb6\t \x01(\t\x12\x16\n\x0c\x63ountry_code\x18\xbc\xb4\t \x01(\t\x12\x0e\n\x04text\x18\xc8\xa9\x07 \x01(\t\x12\x15\n\x0breport_text\x18\xdc\xa9\x07 \x01(\t\x12\x11\n\x07remarks\x18\xb6\xb9\t \x01(\t\x12\x15\n\x0bwindow_name\x18\x85\xb8\t \x01(\t\x12 \n\x16originator_window_name\x18\xaf\xb8\t \x01(\t\x12\x19\n\x0f\x63\x61ncel_at_ssboe\x18\x9d\xcb\t \x01(\x05\x12\x19\n\x0f\x63\x61ncel_at_usecs\x18\x9e\xcb\t \x01(\x05\x12\x1b\n\x11\x63\x61ncel_after_secs\x18\xf8\xb6\t \x01(\x05\x12\x0f\n\x05ssboe\x18\xd4\x94\t \x01(\x05\x12\x0f\n\x05usecs\x18\xd5\x94\t \x01(\x05\"\xcb\x03\n\nNotifyType\x12\x18\n\x14ORDER_RCVD_FROM_CLNT\x10\x01\x12\x19\n\x15MODIFY_RCVD_FROM_CLNT\x10\x02\x12\x19\n\x15\x43\x41NCEL_RCVD_FROM_CLNT\x10\x03\x12\x10\n\x0cOPEN_PENDING\x10\x04\x12\x12\n\x0eMODIFY_PENDING\x10\x05\x12\x12\n\x0e\x43\x41NCEL_PENDING\x10\x06\x12\x1b\n\x17ORDER_RCVD_BY_EXCH_GTWY\x10\x07\x12\x1c\n\x18MODIFY_RCVD_BY_EXCH_GTWY\x10\x08\x12\x1c\n\x18\x43\x41NCEL_RCVD_BY_EXCH_GTWY\x10\t\x12\x16\n\x12ORDER_SENT_TO_EXCH\x10\n\x12\x17\n\x13MODIFY_SENT_TO_EXCH\x10\x0b\x12\x17\n\x13\x43\x41NCEL_SENT_TO_EXCH\x10\x0c\x12\x08\n\x04OPEN\x10\r\x12\x0c\n\x08MODIFIED\x10\x0e\x12\x0c\n\x08\x43OMPLETE\x10\x0f\x12\x17\n\x13MODIFICATION_FAILED\x10\x10\x12\x17\n\x13\x43\x41NCELLATION_FAILED\x10\x11\x12\x13\n\x0fTRIGGER_PENDING\x10\x12\x12\x0b\n\x07GENERIC\x10\x13\x12\x16\n\x12LINK_ORDERS_FAILED\x10\x14\",\n\x0fTransactionType\x12\x07\n\x03\x42UY\x10\x01\x12\x08\n\x04SELL\x10\x02\x12\x06\n\x02SS\x10\x03\".\n\x08\x44uration\x12\x07\n\x03\x44\x41Y\x10\x01\x12\x07\n\x03GTC\x10\x02\x12\x07\n\x03IOC\x10\x03\x12\x07\n\x03\x46OK\x10\x04\"C\n\tPriceType\x12\t\n\x05LIMIT\x10\x01\x12\n\n\x06MARKET\x10\x02\x12\x0e\n\nSTOP_LIMIT\x10\x03\x12\x0f\n\x0bSTOP_MARKET\x10\x04\"\x8c\x01\n\x0b\x42racketType\x12\r\n\tSTOP_ONLY\x10\x01\x12\x0f\n\x0bTARGET_ONLY\x10\x02\x12\x13\n\x0fTARGET_AND_STOP\x10\x03\x12\x14\n\x10STOP_ONLY_STATIC\x10\x04\x12\x16\n\x12TARGET_ONLY_STATIC\x10\x05\x12\x1a\n\x16TARGET_AND_STOP_STATIC\x10\x06\"&\n\x0eOrderPlacement\x12\n\n\x06MANUAL\x10\x01\x12\x08\n\x04\x41UTO\x10\x02')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -113,8 +113,8 @@ _RITHMICORDERNOTIFICATION_NOTIFYTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1408,
-  serialized_end=1867,
+  serialized_start=1497,
+  serialized_end=1956,
 )
 _sym_db.RegisterEnumDescriptor(_RITHMICORDERNOTIFICATION_NOTIFYTYPE)
 
@@ -139,8 +139,8 @@ _RITHMICORDERNOTIFICATION_TRANSACTIONTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1869,
-  serialized_end=1913,
+  serialized_start=1958,
+  serialized_end=2002,
 )
 _sym_db.RegisterEnumDescriptor(_RITHMICORDERNOTIFICATION_TRANSACTIONTYPE)
 
@@ -169,8 +169,8 @@ _RITHMICORDERNOTIFICATION_DURATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1915,
-  serialized_end=1961,
+  serialized_start=2004,
+  serialized_end=2050,
 )
 _sym_db.RegisterEnumDescriptor(_RITHMICORDERNOTIFICATION_DURATION)
 
@@ -199,8 +199,8 @@ _RITHMICORDERNOTIFICATION_PRICETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1963,
-  serialized_end=2030,
+  serialized_start=2052,
+  serialized_end=2119,
 )
 _sym_db.RegisterEnumDescriptor(_RITHMICORDERNOTIFICATION_PRICETYPE)
 
@@ -237,8 +237,8 @@ _RITHMICORDERNOTIFICATION_BRACKETTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2033,
-  serialized_end=2173,
+  serialized_start=2122,
+  serialized_end=2262,
 )
 _sym_db.RegisterEnumDescriptor(_RITHMICORDERNOTIFICATION_BRACKETTYPE)
 
@@ -259,8 +259,8 @@ _RITHMICORDERNOTIFICATION_ORDERPLACEMENT = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=2175,
-  serialized_end=2213,
+  serialized_start=2264,
+  serialized_end=2302,
 )
 _sym_db.RegisterEnumDescriptor(_RITHMICORDERNOTIFICATION_ORDERPLACEMENT)
 
@@ -413,168 +413,189 @@ _RITHMICORDERNOTIFICATION = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='price', full_name='rti.RithmicOrderNotification.price', index=20,
+      name='quan_release_pending', full_name='rti.RithmicOrderNotification.quan_release_pending', index=20,
+      number=112027, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='price', full_name='rti.RithmicOrderNotification.price', index=21,
       number=110306, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='trigger_price', full_name='rti.RithmicOrderNotification.trigger_price', index=21,
+      name='trigger_price', full_name='rti.RithmicOrderNotification.trigger_price', index=22,
       number=149247, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='transaction_type', full_name='rti.RithmicOrderNotification.transaction_type', index=22,
+      name='transaction_type', full_name='rti.RithmicOrderNotification.transaction_type', index=23,
       number=112003, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='duration', full_name='rti.RithmicOrderNotification.duration', index=23,
+      name='duration', full_name='rti.RithmicOrderNotification.duration', index=24,
       number=112005, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='price_type', full_name='rti.RithmicOrderNotification.price_type', index=24,
+      name='price_type', full_name='rti.RithmicOrderNotification.price_type', index=25,
       number=112008, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='orig_price_type', full_name='rti.RithmicOrderNotification.orig_price_type', index=25,
+      name='orig_price_type', full_name='rti.RithmicOrderNotification.orig_price_type', index=26,
       number=154770, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='manual_or_auto', full_name='rti.RithmicOrderNotification.manual_or_auto', index=26,
+      name='manual_or_auto', full_name='rti.RithmicOrderNotification.manual_or_auto', index=27,
       number=154710, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='bracket_type', full_name='rti.RithmicOrderNotification.bracket_type', index=27,
+      name='bracket_type', full_name='rti.RithmicOrderNotification.bracket_type', index=28,
       number=157087, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=1,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='avg_fill_price', full_name='rti.RithmicOrderNotification.avg_fill_price', index=28,
+      name='avg_fill_price', full_name='rti.RithmicOrderNotification.avg_fill_price', index=29,
       number=110322, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='total_fill_size', full_name='rti.RithmicOrderNotification.total_fill_size', index=29,
+      name='total_fill_size', full_name='rti.RithmicOrderNotification.total_fill_size', index=30,
       number=154111, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='total_unfilled_size', full_name='rti.RithmicOrderNotification.total_unfilled_size', index=30,
+      name='total_unfilled_size', full_name='rti.RithmicOrderNotification.total_unfilled_size', index=31,
       number=154112, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='sequence_number', full_name='rti.RithmicOrderNotification.sequence_number', index=31,
+      name='sequence_number', full_name='rti.RithmicOrderNotification.sequence_number', index=32,
       number=112002, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='orig_sequence_number', full_name='rti.RithmicOrderNotification.orig_sequence_number', index=32,
+      name='orig_sequence_number', full_name='rti.RithmicOrderNotification.orig_sequence_number', index=33,
       number=149263, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cor_sequence_number', full_name='rti.RithmicOrderNotification.cor_sequence_number', index=33,
+      name='cor_sequence_number', full_name='rti.RithmicOrderNotification.cor_sequence_number', index=34,
       number=149264, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='currency', full_name='rti.RithmicOrderNotification.currency', index=34,
+      name='currency', full_name='rti.RithmicOrderNotification.currency', index=35,
       number=154382, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='country_code', full_name='rti.RithmicOrderNotification.country_code', index=35,
+      name='country_code', full_name='rti.RithmicOrderNotification.country_code', index=36,
       number=154172, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='text', full_name='rti.RithmicOrderNotification.text', index=36,
+      name='text', full_name='rti.RithmicOrderNotification.text', index=37,
       number=120008, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='report_text', full_name='rti.RithmicOrderNotification.report_text', index=37,
+      name='report_text', full_name='rti.RithmicOrderNotification.report_text', index=38,
       number=120028, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='remarks', full_name='rti.RithmicOrderNotification.remarks', index=38,
+      name='remarks', full_name='rti.RithmicOrderNotification.remarks', index=39,
       number=154806, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cancel_at_ssboe', full_name='rti.RithmicOrderNotification.cancel_at_ssboe', index=39,
+      name='window_name', full_name='rti.RithmicOrderNotification.window_name', index=40,
+      number=154629, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='originator_window_name', full_name='rti.RithmicOrderNotification.originator_window_name', index=41,
+      number=154671, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='cancel_at_ssboe', full_name='rti.RithmicOrderNotification.cancel_at_ssboe', index=42,
       number=157085, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cancel_at_usecs', full_name='rti.RithmicOrderNotification.cancel_at_usecs', index=40,
+      name='cancel_at_usecs', full_name='rti.RithmicOrderNotification.cancel_at_usecs', index=43,
       number=157086, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cancel_after_secs', full_name='rti.RithmicOrderNotification.cancel_after_secs', index=41,
+      name='cancel_after_secs', full_name='rti.RithmicOrderNotification.cancel_after_secs', index=44,
       number=154488, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='ssboe', full_name='rti.RithmicOrderNotification.ssboe', index=42,
+      name='ssboe', full_name='rti.RithmicOrderNotification.ssboe', index=45,
       number=150100, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='usecs', full_name='rti.RithmicOrderNotification.usecs', index=43,
+      name='usecs', full_name='rti.RithmicOrderNotification.usecs', index=46,
       number=150101, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -598,7 +619,7 @@ _RITHMICORDERNOTIFICATION = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=42,
-  serialized_end=2213,
+  serialized_end=2302,
 )
 
 _RITHMICORDERNOTIFICATION.fields_by_name['notify_type'].enum_type = _RITHMICORDERNOTIFICATION_NOTIFYTYPE

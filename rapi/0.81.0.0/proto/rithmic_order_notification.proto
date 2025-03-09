@@ -24,7 +24,6 @@ message RithmicOrderNotification
 			 TRIGGER_PENDING           =  18;
 			 GENERIC                   =  19;
 			 LINK_ORDERS_FAILED        =  20;
-			 RELEASE_PENDING           =  21;
                         }	
 
         enum TransactionType {
