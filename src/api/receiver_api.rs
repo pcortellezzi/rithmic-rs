@@ -1,19 +1,6 @@
 use std::io::Cursor;
-
-use crate::rti::{
-    messages::RithmicMessage, AccountPnLPositionUpdate, BestBidOffer, BracketUpdates,
-    ExchangeOrderNotification, ForcedLogout, InstrumentPnLPositionUpdate, LastTrade, MessageType,
-    Reject, ResponseAccountList, ResponseAccountRmsInfo, ResponseBracketOrder,
-    ResponseCancelAllOrders, ResponseCancelOrder, ResponseExitPosition, ResponseHeartbeat,
-    ResponseLogin, ResponseLogout, ResponseMarketDataUpdate, ResponseModifyOrder, ResponseNewOrder,
-    ResponsePnLPositionSnapshot, ResponsePnLPositionUpdates, ResponseProductRmsInfo,
-    ResponseRithmicSystemInfo, ResponseSearchSymbols, ResponseShowBracketStops,
-    ResponseShowBrackets, ResponseShowOrderHistory, ResponseShowOrderHistoryDates,
-    ResponseShowOrderHistoryDetail, ResponseShowOrderHistorySummary, ResponseShowOrders,
-    ResponseSubscribeForOrderUpdates, ResponseSubscribeToBracketUpdates, ResponseTickBarReplay,
-    ResponseTimeBarReplay, ResponseTradeRoutes, ResponseUpdateStopBracketLevel,
-    ResponseUpdateTargetBracketLevel, RithmicOrderNotification, TickBar, TimeBar,
-};
+use bytes::Bytes;
+use crate::rti::{messages::RithmicMessage, *};
 use prost::Message;
 use tracing::{event, Level};
 
@@ -34,7 +21,7 @@ pub struct RithmicReceiverApi {
 }
 
 impl RithmicReceiverApi {
-    pub fn buf_to_message(&self, data: Vec<u8>) -> Result<RithmicResponse, String> {
+    pub fn buf_to_message(&self, data: Bytes) -> Result<RithmicResponse, String> {
         let parsed_message = MessageType::decode(&mut Cursor::new(&data[4..]));
 
         let response = match parsed_message.clone().unwrap().template_id {
@@ -87,6 +74,20 @@ impl RithmicReceiverApi {
                 RithmicResponse {
                     request_id: "".to_string(),
                     message: RithmicMessage::ResponseHeartbeat(resp),
+                    is_update: false,
+                    has_more: false,
+                    multi_response: false,
+                    error,
+                    source: self.source.clone(),
+                }
+            }
+            21 => {
+                let resp = ResponseRithmicSystemGatewayInfo::decode(&mut Cursor::new(&data[4..])).unwrap();
+                let error = self.get_error(&resp.rp_code);
+
+                RithmicResponse {
+                    request_id: resp.user_msg[0].clone(),
+                    message: RithmicMessage::ResponseRithmicSystemGatewayInfo(resp),
                     is_update: false,
                     has_more: false,
                     multi_response: false,
@@ -169,6 +170,45 @@ impl RithmicReceiverApi {
                 RithmicResponse {
                     request_id: "".to_string(),
                     message: RithmicMessage::BestBidOffer(resp),
+                    is_update: true,
+                    has_more: false,
+                    multi_response: false,
+                    error: None,
+                    source: self.source.clone(),
+                }
+            }
+            156 => {
+                let resp = OrderBook::decode(&mut Cursor::new(&data[4..])).unwrap();
+
+                RithmicResponse {
+                    request_id: "".to_string(),
+                    message: RithmicMessage::OrderBook(resp),
+                    is_update: true,
+                    has_more: false,
+                    multi_response: false,
+                    error: None,
+                    source: self.source.clone(),
+                }
+            }
+            158 => {
+                let resp = OpenInterest::decode(&mut Cursor::new(&data[4..])).unwrap();
+
+                RithmicResponse {
+                    request_id: "".to_string(),
+                    message: RithmicMessage::OpenInterest(resp),
+                    is_update: true,
+                    has_more: false,
+                    multi_response: false,
+                    error: None,
+                    source: self.source.clone(),
+                }
+            }
+            160 => {
+                let resp = DepthByOrder::decode(&mut Cursor::new(&data[4..])).unwrap();
+
+                RithmicResponse {
+                    request_id: "".to_string(),
+                    message: RithmicMessage::DepthByOrder(resp),
                     is_update: true,
                     has_more: false,
                     multi_response: false,

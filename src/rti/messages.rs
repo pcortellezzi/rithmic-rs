@@ -1,17 +1,4 @@
-use super::{
-    AccountPnLPositionUpdate, BestBidOffer, BracketUpdates, ExchangeOrderNotification,
-    ForcedLogout, InstrumentPnLPositionUpdate, LastTrade, Reject, ResponseAccountList,
-    ResponseAccountRmsInfo, ResponseBracketOrder, ResponseCancelAllOrders, ResponseCancelOrder,
-    ResponseExitPosition, ResponseHeartbeat, ResponseLogin, ResponseLogout,
-    ResponseMarketDataUpdate, ResponseModifyOrder, ResponseNewOrder, ResponsePnLPositionSnapshot,
-    ResponsePnLPositionUpdates, ResponseProductRmsInfo, ResponseRithmicSystemInfo,
-    ResponseSearchSymbols, ResponseShowBracketStops, ResponseShowBrackets,
-    ResponseShowOrderHistory, ResponseShowOrderHistoryDates, ResponseShowOrderHistoryDetail,
-    ResponseShowOrderHistorySummary, ResponseShowOrders, ResponseSubscribeForOrderUpdates,
-    ResponseSubscribeToBracketUpdates, ResponseTickBarReplay, ResponseTimeBarReplay,
-    ResponseTradeRoutes, ResponseUpdateStopBracketLevel, ResponseUpdateTargetBracketLevel,
-    RithmicOrderNotification, TickBar, TimeBar,
-};
+use super::*;
 
 #[allow(clippy::large_enum_variant)]
 #[derive(Debug, Clone)]
@@ -19,10 +6,13 @@ pub enum RithmicMessage {
     AccountPnLPositionUpdate(AccountPnLPositionUpdate),
     BestBidOffer(BestBidOffer),
     BracketUpdates(BracketUpdates),
+    DepthByOrder(DepthByOrder),
     ExchangeOrderNotification(ExchangeOrderNotification),
     ForcedLogout(ForcedLogout),
     InstrumentPnLPositionUpdate(InstrumentPnLPositionUpdate),
     LastTrade(LastTrade),
+    OpenInterest(OpenInterest),
+    OrderBook(OrderBook),
     Reject(Reject),
     ResponseAccountList(ResponseAccountList),
     ResponseAccountRmsInfo(ResponseAccountRmsInfo),
@@ -40,6 +30,7 @@ pub enum RithmicMessage {
     ResponsePnLPositionUpdates(ResponsePnLPositionUpdates),
     ResponseProductRmsInfo(ResponseProductRmsInfo),
     ResponseRithmicSystemInfo(ResponseRithmicSystemInfo),
+    ResponseRithmicSystemGatewayInfo(ResponseRithmicSystemGatewayInfo),
     ResponseSearchSymbols(ResponseSearchSymbols),
     ResponseShowBrackets(ResponseShowBrackets),
     ResponseShowBracketStops(ResponseShowBracketStops),

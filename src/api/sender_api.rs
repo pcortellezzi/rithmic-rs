@@ -1,7 +1,8 @@
+use bytes::Bytes;
 use prost::Message;
 
 use crate::{
-    connection_info::{AccountInfo, RithmicConnectionSystem},
+    api::RithmicConnectionInfo,
     rti::{
         request_bracket_order,
         request_login::SysInfraType,
@@ -9,10 +10,10 @@ use crate::{
         request_new_order, request_pn_l_position_updates, RequestBracketOrder, RequestCancelOrder,
         RequestExitPosition, RequestHeartbeat, RequestLogin, RequestLogout,
         RequestMarketDataUpdate, RequestModifyOrder, RequestNewOrder, RequestPnLPositionSnapshot,
-        RequestPnLPositionUpdates, RequestRithmicSystemInfo, RequestShowBracketStops,
-        RequestShowBrackets, RequestShowOrders, RequestSubscribeForOrderUpdates,
-        RequestSubscribeToBracketUpdates, RequestUpdateStopBracketLevel,
-        RequestUpdateTargetBracketLevel,
+        RequestPnLPositionUpdates, RequestRithmicSystemInfo, RequestRithmicSystemGatewayInfo,
+        RequestShowBracketStops, RequestShowBrackets, RequestShowOrders,
+        RequestSubscribeForOrderUpdates, RequestSubscribeToBracketUpdates,
+        RequestUpdateStopBracketLevel, RequestUpdateTargetBracketLevel,
     },
 };
 
@@ -25,19 +26,19 @@ pub const USER_TYPE: i32 = 3;
 #[derive(Debug, Clone)]
 pub struct RithmicSenderApi {
     account_id: String,
-    env: RithmicConnectionSystem,
+    conn_info: RithmicConnectionInfo,
     fcm_id: String,
     ib_id: String,
     message_id_counter: u64,
 }
 
 impl RithmicSenderApi {
-    pub fn new(account_info: &AccountInfo) -> Self {
+    pub fn new(conn_info: &RithmicConnectionInfo) -> Self {
         RithmicSenderApi {
-            account_id: account_info.account_id.clone(),
-            env: account_info.env.clone(),
-            fcm_id: account_info.fcm_id.clone(),
-            ib_id: account_info.ib_id.clone(),
+            account_id: "".to_string(),
+            conn_info: conn_info.clone(),
+            fcm_id: "".to_string(),
+            ib_id: "".to_string(),
             message_id_counter: 0,
         }
     }
@@ -47,24 +48,35 @@ impl RithmicSenderApi {
         self.message_id_counter.to_string()
     }
 
-    fn request_to_buf(&self, req: impl Message, id: String) -> (Vec<u8>, String) {
-        let mut buf = Vec::new();
+    fn request_to_buf(&self, req: impl Message, id: String) -> (Bytes, String) {
         let len = req.encoded_len() as u32;
         let header = len.to_be_bytes();
 
-        buf.reserve((len + 4) as usize);
-        req.encode(&mut buf).unwrap();
-        buf.splice(0..0, header.iter().cloned());
+        let mut buf = Vec::with_capacity((len + 4) as usize);
+        buf.extend_from_slice(&header); // Ajout du header
+        req.encode(&mut buf).unwrap(); // Encodage du message
 
-        (buf, id)
+        (Bytes::from(buf), id)
     }
 
-    pub fn request_rithmic_system_info(&mut self) -> (Vec<u8>, String) {
+    pub fn request_rithmic_system_info(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestRithmicSystemInfo {
             template_id: 16,
             user_msg: vec![id.clone()],
+        };
+
+        self.request_to_buf(req, id)
+    }
+
+    pub fn request_rithmic_system_gateway_info(&mut self, system_name: String) -> (Bytes, String) {
+        let id = self.get_next_message_id();
+
+        let req = RequestRithmicSystemGatewayInfo {
+            template_id: 20,
+            user_msg: vec![id.clone()],
+            system_name: Some(system_name),
         };
 
         self.request_to_buf(req, id)
@@ -76,12 +88,12 @@ impl RithmicSenderApi {
         infra_type: SysInfraType,
         user: &str,
         password: &str,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestLogin {
             template_id: 10,
-            template_version: Some("5.22".into()),
+            template_version: Some("5.27".into()),
             user: Some(user.to_string()),
             password: Some(password.to_string()),
             app_name: Some("pede:pts".to_string()),
@@ -95,7 +107,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_logout(&mut self) -> (Vec<u8>, String) {
+    pub fn request_logout(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestLogout {
@@ -106,7 +118,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_heartbeat(&mut self) -> (Vec<u8>, String) {
+    pub fn request_heartbeat(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestHeartbeat {
@@ -124,7 +136,7 @@ impl RithmicSenderApi {
         exchange: &str,
         fields: Vec<UpdateBits>,
         request_type: Request,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let mut req = RequestMarketDataUpdate {
@@ -147,7 +159,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_subscribe_for_order_updates(&mut self) -> (Vec<u8>, String) {
+    pub fn request_subscribe_for_order_updates(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestSubscribeForOrderUpdates {
@@ -161,7 +173,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_subscribe_to_bracket_updates(&mut self) -> (Vec<u8>, String) {
+    pub fn request_subscribe_to_bracket_updates(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestSubscribeToBracketUpdates {
@@ -187,14 +199,11 @@ impl RithmicSenderApi {
 
         // optional args
         duration: Option<request_new_order::Duration>,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
-        let trade_route = match self.env {
-            RithmicConnectionSystem::Live => TRADE_ROUTE_LIVE,
-            RithmicConnectionSystem::Demo => TRADE_ROUTE_DEMO,
-            RithmicConnectionSystem::Test => panic!("test environment not supported"),
-        };
+        // TODO
+        let trade_route = "";
 
         let req = RequestNewOrder {
             template_id: 312,
@@ -225,14 +234,11 @@ impl RithmicSenderApi {
     pub fn request_bracket_order(
         &mut self,
         bracket_order: RithmicBracketOrder,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
-        let trade_route = match self.env {
-            RithmicConnectionSystem::Live => TRADE_ROUTE_LIVE,
-            RithmicConnectionSystem::Demo => TRADE_ROUTE_DEMO,
-            RithmicConnectionSystem::Test => panic!("test environment not supported"),
-        };
+        // TODO
+        let trade_route = "";
 
         let req = RequestBracketOrder {
             template_id: 330,
@@ -274,7 +280,7 @@ impl RithmicSenderApi {
         qty: i32,
         price: f64,
         ordertype: i32,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestModifyOrder {
@@ -300,7 +306,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_cancel_order(&mut self, basket_id: &str) -> (Vec<u8>, String) {
+    pub fn request_cancel_order(&mut self, basket_id: &str) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestCancelOrder {
@@ -317,7 +323,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_exit_position(&mut self, symbol: &str, exchange: &str) -> (Vec<u8>, String) {
+    pub fn request_exit_position(&mut self, symbol: &str, exchange: &str) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestExitPosition {
@@ -339,7 +345,7 @@ impl RithmicSenderApi {
         &mut self,
         basket_id: &str,
         profit_ticks: i32,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestUpdateTargetBracketLevel {
@@ -360,7 +366,7 @@ impl RithmicSenderApi {
         &mut self,
         basket_id: &str,
         stop_ticks: i32,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestUpdateStopBracketLevel {
@@ -377,7 +383,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_show_brackets(&mut self) -> (Vec<u8>, String) {
+    pub fn request_show_brackets(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestShowBrackets {
@@ -391,7 +397,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_show_bracket_stops(&mut self) -> (Vec<u8>, String) {
+    pub fn request_show_bracket_stops(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestShowBracketStops {
@@ -405,7 +411,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_show_orders(&mut self) -> (Vec<u8>, String) {
+    pub fn request_show_orders(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestShowOrders {
@@ -422,7 +428,7 @@ impl RithmicSenderApi {
     pub fn request_pnl_position_updates(
         &mut self,
         action: request_pn_l_position_updates::Request,
-    ) -> (Vec<u8>, String) {
+    ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestPnLPositionUpdates {
@@ -437,7 +443,7 @@ impl RithmicSenderApi {
         self.request_to_buf(req, id)
     }
 
-    pub fn request_pnl_position_snapshot(&mut self) -> (Vec<u8>, String) {
+    pub fn request_pnl_position_snapshot(&mut self) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
         let req = RequestPnLPositionSnapshot {

@@ -3,14 +3,14 @@ use tracing::{event, Level};
 
 use crate::{
     api::{
+        RithmicConnectionInfo,
         receiver_api::{RithmicReceiverApi, RithmicResponse},
         rithmic_command_types::{RithmicBracketOrder, RithmicCancelOrder, RithmicModifyOrder},
         sender_api::RithmicSenderApi,
     },
-    connection_info::{self, AccountInfo, RithmicConnectionSystem},
     request_handler::{RithmicRequest, RithmicRequestHandler},
     rti::request_login::SysInfraType,
-    ws::{get_heartbeat_interval, PlantActor, RithmicStream},
+    ws::{get_heartbeat_interval, PlantActor, RithmicStream, connect},
 };
 
 use futures_util::{
@@ -21,7 +21,8 @@ use futures_util::{
 use tokio_tungstenite::{
     connect_async,
     tungstenite::{Error, Message},
-    MaybeTlsStream,
+    WebSocketStream,
+    MaybeTlsStream
 };
 
 use tokio::{
@@ -79,18 +80,15 @@ pub enum OrderPlantCommand {
 pub struct RithmicOrderPlant {
     pub connection_handle: tokio::task::JoinHandle<()>,
     sender: tokio::sync::mpsc::Sender<OrderPlantCommand>,
-    subscription_sender: tokio::sync::broadcast::Sender<RithmicResponse>,
+    subscription_sender: Sender<RithmicResponse>,
 }
 
 impl RithmicOrderPlant {
-    pub async fn new(
-        env: &RithmicConnectionSystem,
-        account_info: &AccountInfo,
-    ) -> RithmicOrderPlant {
+    pub async fn new(conn_info: &RithmicConnectionInfo) -> RithmicOrderPlant {
         let (req_tx, req_rx) = tokio::sync::mpsc::channel::<OrderPlantCommand>(32);
         let (sub_tx, _sub_rx) = tokio::sync::broadcast::channel(1024);
 
-        let mut order_plant = OrderPlant::new(req_rx, sub_tx.clone(), account_info, env)
+        let mut order_plant = OrderPlant::new(req_rx, sub_tx.clone(), conn_info)
             .await
             .unwrap();
 
@@ -118,16 +116,16 @@ impl RithmicStream for RithmicOrderPlant {
 }
 
 pub struct OrderPlant {
-    config: connection_info::RithmicConnectionInfo,
+    config: RithmicConnectionInfo,
     interval: Interval,
     logged_in: bool,
     request_handler: RithmicRequestHandler,
     request_receiver: tokio::sync::mpsc::Receiver<OrderPlantCommand>,
-    rithmic_reader: SplitStream<tokio_tungstenite::WebSocketStream<MaybeTlsStream<TcpStream>>>,
+    rithmic_reader: SplitStream<WebSocketStream<MaybeTlsStream<TcpStream>>>,
     rithmic_receiver_api: RithmicReceiverApi,
     rithmic_sender: SplitSink<
-        tokio_tungstenite::WebSocketStream<MaybeTlsStream<TcpStream>>,
-        tokio_tungstenite::tungstenite::Message,
+        WebSocketStream<MaybeTlsStream<TcpStream>>,
+        Message,
     >,
     rithmic_sender_api: RithmicSenderApi,
     subscription_sender: Sender<RithmicResponse>,
@@ -137,15 +135,13 @@ impl OrderPlant {
     pub async fn new(
         request_receiver: tokio::sync::mpsc::Receiver<OrderPlantCommand>,
         subscription_sender: Sender<RithmicResponse>,
-        account_info: &AccountInfo,
-        env: &RithmicConnectionSystem,
+        conn_info: &RithmicConnectionInfo,
     ) -> Result<OrderPlant, String> {
-        let config = connection_info::get_config(env);
+        let config = conn_info.clone();
 
-        let (ws_stream, _) = connect_async(&config.url).await.expect("Failed to connect");
+        let ws_stream = connect(&config.url).await.unwrap();
         let (rithmic_sender, rithmic_reader) = ws_stream.split();
-
-        let rithmic_sender_api = RithmicSenderApi::new(account_info);
+        let rithmic_sender_api = RithmicSenderApi::new(&config);
         let rithmic_receiver_api = RithmicReceiverApi {
             source: "order_plant".to_string(),
         };
