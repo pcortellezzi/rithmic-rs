@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 pub mod receiver_api;
 pub mod rithmic_command_types;
 pub mod sender_api;
@@ -6,7 +8,7 @@ pub mod sender_api;
 pub static DEFAULT_RTI_WS_URL: &str = "wss://rprotocol-mobile.rithmic.com";
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct RithmicConnectionInfo {
     pub url: String,
     pub user: String,
