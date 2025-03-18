@@ -42,8 +42,10 @@ use tungstenite::handshake::client::Request;
 use tungstenite::http;
 use tungstenite::http::header::{CONNECTION, UPGRADE};
 use tungstenite::http::Uri;
-use crate::rti::messages::RithmicMessage;
-use crate::rti::{ResponseRithmicSystemGatewayInfo, ResponseRithmicSystemInfo};
+use crate::rti::{
+    ResponseRithmicSystemGatewayInfo, ResponseRithmicSystemInfo,
+    messages::RithmicMessage
+};
 
 pub enum SharedPlantCommand {
     RithmicSystemInfo {},

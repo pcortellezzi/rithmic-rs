@@ -53,6 +53,20 @@ impl RithmicReceiverApi {
                     source: self.source.clone(),
                 }
             }
+            15 => {
+                let resp = ResponseReferenceData::decode(&mut Cursor::new(&data[4..])).unwrap();
+                let error = self.get_error(&resp.rp_code);
+
+                RithmicResponse {
+                    request_id: resp.user_msg[0].clone(),
+                    message: RithmicMessage::ResponseReferenceData(resp),
+                    is_update: false,
+                    has_more: false,
+                    multi_response: false,
+                    error,
+                    source: self.source.clone(),
+                }
+            }
             17 => {
                 let resp = ResponseRithmicSystemInfo::decode(&mut Cursor::new(&data[4..])).unwrap();
                 let error = self.get_error(&resp.rp_code);
@@ -136,6 +150,21 @@ impl RithmicReceiverApi {
                     source: self.source.clone(),
                 }
             }
+            101 => {
+                let resp = ResponseGetInstrumentByUnderlying::decode(&mut Cursor::new(&data[4..])).unwrap();
+                let has_more = self.has_multiple(&resp.rq_handler_rp_code);
+                let error = self.get_error(&resp.rp_code);
+
+                RithmicResponse {
+                    request_id: resp.user_msg[0].clone(),
+                    message: RithmicMessage::ResponseGetInstrumentByUnderlying(resp),
+                    is_update: false,
+                    has_more,
+                    multi_response: true,
+                    error,
+                    source: self.source.clone(),
+                }
+            }
             110 => {
                 let resp = ResponseSearchSymbols::decode(&mut Cursor::new(&data[4..])).unwrap();
                 let has_more = self.has_multiple(&resp.rq_handler_rp_code);
@@ -144,6 +173,21 @@ impl RithmicReceiverApi {
                 RithmicResponse {
                     request_id: resp.user_msg[0].clone(),
                     message: RithmicMessage::ResponseSearchSymbols(resp),
+                    is_update: false,
+                    has_more,
+                    multi_response: true,
+                    error,
+                    source: self.source.clone(),
+                }
+            }
+            112 => {
+                let resp = ResponseProductCodes::decode(&mut Cursor::new(&data[4..])).unwrap();
+                let has_more = self.has_multiple(&resp.rq_handler_rp_code);
+                let error = self.get_error(&resp.rp_code);
+
+                RithmicResponse {
+                    request_id: resp.user_msg[0].clone(),
+                    message: RithmicMessage::ResponseProductCodes(resp),
                     is_update: false,
                     has_more,
                     multi_response: true,
