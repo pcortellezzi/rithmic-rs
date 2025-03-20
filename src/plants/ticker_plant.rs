@@ -426,7 +426,7 @@ impl RithmicTickerPlantHandle {
         Ok(response)
     }
 
-    pub async fn get_Instrument_by_underlying(&mut self) -> Result<Vec<RithmicResponse>, String> {
+    pub async fn get_instrument_by_underlying(&self) -> Result<Vec<RithmicResponse>, String> {
         let (tx, rx) = oneshot::channel::<Result<Vec<RithmicResponse>, String>>();
 
         let command = TickerPlantCommand::GetInstrumentByUnderlying {
@@ -438,7 +438,7 @@ impl RithmicTickerPlantHandle {
         Ok(rx.await.unwrap()?)
     }
 
-    pub async fn product_codes(&mut self,
+    pub async fn product_codes(&self,
                                 exchange: Option<String>
     ) -> Result<Vec<RithmicResponse>, String> {
         let (tx, rx) = oneshot::channel::<Result<Vec<RithmicResponse>, String>>();
@@ -453,7 +453,7 @@ impl RithmicTickerPlantHandle {
         Ok(rx.await.unwrap()?)
     }
 
-    pub async fn reference_data(&mut self,
+    pub async fn reference_data(&self,
                                 symbol: Option<String>,
                                 exchange: Option<String>
     ) -> Result<RithmicResponse, String> {
@@ -470,7 +470,7 @@ impl RithmicTickerPlantHandle {
         Ok(rx.await.unwrap()?.remove(0))
     }
 
-    pub async fn search_symbols(&mut self,
+    pub async fn search_symbols(&self,
                                 search_text: Option<String>,
                                 instrument_type: Option<InstrumentType>,
                                 exact_search: Option<bool>
