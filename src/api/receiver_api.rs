@@ -150,7 +150,7 @@ impl RithmicReceiverApi {
                     source: self.source.clone(),
                 }
             }
-            101 => {
+            103 => {
                 let resp = ResponseGetInstrumentByUnderlying::decode(&mut Cursor::new(&data[4..])).unwrap();
                 let has_more = self.has_multiple(&resp.rq_handler_rp_code);
                 let error = self.get_error(&resp.rp_code);
@@ -260,6 +260,20 @@ impl RithmicReceiverApi {
                     source: self.source.clone(),
                 }
             }
+            201 => {
+                let resp = ResponseTimeBarUpdate::decode(&mut Cursor::new(&data[4..])).unwrap();
+                let error = self.get_error(&resp.rp_code);
+
+                RithmicResponse {
+                    request_id: resp.user_msg[0].clone(),
+                    message: RithmicMessage::ResponseTimeBarUpdate(resp),
+                    is_update: false,
+                    has_more: false,
+                    multi_response: false,
+                    error,
+                    source: self.source.clone(),
+                }
+            }
             203 => {
                 let resp = ResponseTimeBarReplay::decode(&mut Cursor::new(&data[4..])).unwrap();
                 let has_more = self.has_multiple(&resp.rq_handler_rp_code);
@@ -271,6 +285,20 @@ impl RithmicReceiverApi {
                     is_update: false,
                     has_more,
                     multi_response: true,
+                    error,
+                    source: self.source.clone(),
+                }
+            }
+            205 => {
+                let resp = ResponseTickBarUpdate::decode(&mut Cursor::new(&data[4..])).unwrap();
+                let error = self.get_error(&resp.rp_code);
+
+                RithmicResponse {
+                    request_id: resp.user_msg[0].clone(),
+                    message: RithmicMessage::ResponseTickBarUpdate(resp),
+                    is_update: false,
+                    has_more: false,
+                    multi_response: false,
                     error,
                     source: self.source.clone(),
                 }
@@ -290,13 +318,28 @@ impl RithmicReceiverApi {
                     source: self.source.clone(),
                 }
             }
+            209 => {
+                let resp = ResponseVolumeProfileMinuteBars::decode(&mut Cursor::new(&data[4..])).unwrap();
+                let has_more = self.has_multiple(&resp.rq_handler_rp_code);
+                let error = self.get_error(&resp.rp_code);
+
+                RithmicResponse {
+                    request_id: resp.user_msg[0].clone(),
+                    message: RithmicMessage::ResponseVolumeProfileMinuteBars(resp),
+                    is_update: false,
+                    has_more,
+                    multi_response: true,
+                    error,
+                    source: self.source.clone(),
+                }
+            }
             250 => {
                 let resp = TimeBar::decode(&mut Cursor::new(&data[4..])).unwrap();
 
                 RithmicResponse {
                     request_id: "".to_string(),
                     message: RithmicMessage::TimeBar(resp),
-                    is_update: false,
+                    is_update: true,
                     has_more: false,
                     multi_response: false,
                     error: None,
@@ -309,7 +352,7 @@ impl RithmicReceiverApi {
                 RithmicResponse {
                     request_id: "".to_string(),
                     message: RithmicMessage::TickBar(resp),
-                    is_update: false,
+                    is_update: true,
                     has_more: false,
                     multi_response: false,
                     error: None,

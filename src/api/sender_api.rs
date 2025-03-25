@@ -5,8 +5,6 @@ use crate::{
     api::RithmicConnectionInfo,
     rti::{*,
         request_login::SysInfraType,
-        request_market_data_update::{Request, UpdateBits},
-        request_search_symbols::{InstrumentType, Pattern},
     },
 };
 use super::rithmic_command_types::RithmicBracketOrder;
@@ -114,8 +112,8 @@ impl RithmicSenderApi {
         &mut self,
         symbol: &str,
         exchange: &str,
-        fields: Vec<UpdateBits>,
-        request_type: Request,
+        fields: Vec<request_market_data_update::UpdateBits>,
+        request_type: request_market_data_update::Request,
     ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
@@ -188,9 +186,9 @@ impl RithmicSenderApi {
     }
 
     pub fn request_search_symbols(&mut self,
-                                  search_text: Option<String>,
-                                  instrument_type: Option<InstrumentType>,
-                                  exact_search: Option<bool>
+        search_text: Option<String>,
+        instrument_type: Option<request_search_symbols::InstrumentType>,
+        exact_search: Option<bool>
     ) -> (Bytes, String) {
         let id = self.get_next_message_id();
 
@@ -200,8 +198,8 @@ impl RithmicSenderApi {
             search_text,
             instrument_type: if instrument_type.is_some() {Some(instrument_type.unwrap() as i32)} else {None},
             pattern: Some(if exact_search.is_some_and(|b| { b }) {
-                Pattern::Equals as i32
-            } else { Pattern::Contains as i32 }),
+                request_search_symbols::Pattern::Equals as i32
+            } else { request_search_symbols::Pattern::Contains as i32 }),
             ..RequestSearchSymbols::default()
         };
 
@@ -231,6 +229,118 @@ impl RithmicSenderApi {
             ib_id: Some(self.ib_id.clone()),
             account_id: Some(self.account_id.clone()),
             user_msg: vec![id.clone()],
+        };
+
+        self.request_to_buf(req, id)
+    }
+
+    pub fn request_tick_bar_replay(
+        &mut self,
+        symbol: &str,
+        exchange: &str,
+        bar_type: request_tick_bar_replay::BarType,
+        bar_sub_type: request_tick_bar_replay::BarSubType,
+        bar_type_specifier: &str,
+        start_index: i32,
+        finish_index: i32,
+        direction: request_tick_bar_replay::Direction,
+        time_order: request_tick_bar_replay::TimeOrder,
+    ) -> (Bytes, String) {
+        let id = self.get_next_message_id();
+
+        let req = RequestTickBarReplay {
+            template_id: 206,
+            user_msg: vec![id.clone()],
+            symbol: Some(symbol.into()),
+            exchange: Some(exchange.into()),
+            bar_type: Some(bar_type.into()),
+            bar_sub_type: Some(bar_sub_type.into()),
+            bar_type_specifier: Some(bar_type_specifier.into()),
+            start_index: Some(start_index),
+            finish_index: Some(finish_index),
+            direction: Some(direction.into()),
+            time_order: Some(time_order.into()),
+            ..RequestTickBarReplay::default()
+        };
+
+        self.request_to_buf(req, id)
+    }
+
+    pub fn request_tick_bar_update(
+        &mut self,
+        symbol: &str,
+        exchange: &str,
+        bar_type: request_tick_bar_update::BarType,
+        bar_sub_type: request_tick_bar_update::BarSubType,
+        bar_type_specifier: &str,
+        request_type: request_tick_bar_update::Request,
+    ) -> (Bytes, String) {
+        let id = self.get_next_message_id();
+
+        let req = RequestTickBarUpdate {
+            template_id: 204,
+            user_msg: vec![id.clone()],
+            symbol: Some(symbol.into()),
+            exchange: Some(exchange.into()),
+            bar_type: Some(bar_type.into()),
+            bar_sub_type: Some(bar_sub_type.into()),
+            bar_type_specifier: Some(bar_type_specifier.into()),
+            request: Some(request_type.into()),
+            ..RequestTickBarUpdate::default()
+        };
+
+        self.request_to_buf(req, id)
+    }
+
+    pub fn request_time_bar_replay(
+        &mut self,
+        symbol: &str,
+        exchange: &str,
+        bar_type: request_time_bar_replay::BarType,
+        bar_type_period: i32,
+        start_index: i32,
+        finish_index: i32,
+        direction: request_time_bar_replay::Direction,
+        time_order: request_time_bar_replay::TimeOrder,
+    ) -> (Bytes, String) {
+        let id = self.get_next_message_id();
+
+        let req = RequestTimeBarReplay {
+            template_id: 202,
+            user_msg: vec![id.clone()],
+            symbol: Some(symbol.into()),
+            exchange: Some(exchange.into()),
+            bar_type: Some(bar_type.into()),
+            bar_type_period: Some(bar_type_period),
+            start_index: Some(start_index),
+            finish_index: Some(finish_index),
+            direction: Some(direction.into()),
+            time_order: Some(time_order.into()),
+            ..RequestTimeBarReplay::default()
+        };
+
+        self.request_to_buf(req, id)
+    }
+
+    pub fn request_time_bar_update(
+        &mut self,
+        symbol: &str,
+        exchange: &str,
+        bar_type: request_time_bar_update::BarType,
+        bar_type_period: i32,
+        request_type: request_time_bar_update::Request,
+    ) -> (Bytes, String) {
+        let id = self.get_next_message_id();
+
+        let req = RequestTimeBarUpdate {
+            template_id: 200,
+            user_msg: vec![id.clone()],
+            symbol: Some(symbol.into()),
+            exchange: Some(exchange.into()),
+            bar_type: Some(bar_type.into()),
+            bar_type_period: Some(bar_type_period),
+            request: Some(request_type.into()),
+            ..RequestTimeBarUpdate::default()
         };
 
         self.request_to_buf(req, id)
